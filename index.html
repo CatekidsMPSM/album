@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ÁlbumKids 🌟</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+/* ══════════════════════════════════════════════════
+   VARIABLES & RESET
+══════════════════════════════════════════════════ */
+:root {
+  --amarillo:  #FFD93D;
+  --naranja:   #FF6B35;
+  --rosa:      #FF6B9D;
+  --morado:    #7C5CBF;
+  --azul:      #4ECDC4;
+  --verde:     #6BCB77;
+  --fondo:     #1a1a2e;
+  --fondo2:    #16213e;
+  --fondo3:    #0f3460;
+  --carta:     #1e2a4a;
+  --carta2:    #243356;
+  --texto:     #f0f4ff;
+  --texto2:    #a8b5d1;
+  --sombra:    0 8px 32px rgba(0,0,0,.5);
+  --radio:     16px;
+  --radio-sm:  10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════
+   ESTRELLAS DE FONDO ANIMADAS
+══════════════════════════════════════════════════ */
+.stars {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(124,92,191,.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(78,205,196,.1) 0%, transparent 60%);
+}
+.stars::before, .stars::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 30%, rgba(255,255,255,.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 55%, rgba(255,255,255,.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 10%, rgba(255,255,255,.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 95%, rgba(255,255,255,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,.8) 0%, transparent 100%);
+  animation: twinkle 4s infinite alternate;
+}
+.stars::after { animation-delay: 2s; animation-duration: 5s; opacity: .5; }
+@keyframes twinkle { from { opacity: .3; } to { opacity: 1; } }
+
+/* ══════════════════════════════════════════════════
+   CONTENEDOR PRINCIPAL
+══════════════════════════════════════════════════ */
+.app {
+  position: relative; z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════════════════
+   PANTALLA DE LOGIN
+══════════════════════════════════════════════════ */
+#pantalla-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  gap: 0;
+}
+.logo-area {
+  text-align: center;
+  margin-bottom: 32px;
+  animation: bounceIn .8s cubic-bezier(.68,-.55,.27,1.55);
+}
+@keyframes bounceIn {
+  0%   { transform: scale(0); opacity: 0; }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.logo-emoji {
+  font-size: 72px;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(255,217,61,.5));
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.logo-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.8rem;
+  background: linear-gradient(135deg, var(--amarillo), var(--naranja), var(--rosa));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-top: 8px;
+}
+.logo-sub {
+  color: var(--texto2);
+  font-size: .9rem;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.login-card {
+  background: var(--carta);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 100%;
+  box-shadow: var(--sombra), 0 0 40px rgba(124,92,191,.2);
+}
+.login-label {
+  font-size: .8rem;
+  font-weight: 800;
+  color: var(--amarillo);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+.login-input {
+  width: 100%;
+  background: var(--fondo3);
+  border: 2px solid rgba(255,255,255,.1);
+  border-radius: var(--radio-sm);
+  padding: 14px 16px;
+  color: var(--texto);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.login-input:focus {
+  border-color: var(--amarillo);
+  box-shadow: 0 0 0 4px rgba(255,217,61,.2);
+}
+.login-input::placeholder { color: rgba(255,255,255,.2); letter-spacing: .1em; }
+
+/* ── BOTÓN ESCANEAR QR ── */
+.btn-scan-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.btn-scan {
+  flex: 1;
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  border: none;
+  border-radius: var(--radio-sm);
+  padding: 13px 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 20px rgba(124,92,191,.4);
+}
+.btn-scan:active  { transform: scale(.97); }
+.btn-scan:hover   { box-shadow: 0 6px 28px rgba(124,92,191,.6); transform: translateY(-1px); }
+
+/* ── SCANNER OVERLAY ── */
+.scanner-overlay {
+  position: fixed; inset: 0; z-index: 350;
+  background: rgba(0,0,0,.96);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.scanner-overlay.visible { opacity: 1; pointer-events: all; }
+
+.scanner-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  color: var(--amarillo);
+  margin-bottom: 6px;
+  text-align: center;
+}
+.scanner-sub {
+  font-size: .82rem;
+  color: var(--texto2);
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.scanner-viewport {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+  box-shadow: 0 0 0 3px var(--morado), 0 0 0 6px rgba(124,92,191,.3);
+}
+/* Esquinas decorativas del visor */
+.scanner-viewport::before,
+.scanner-viewport::after {
+  content: "";
+  position: absolute;
+  width: 40px; height: 40px;
+  border-color: var(--amarillo);
+  border-style: solid;
+  z-index: 10;
+  pointer-events: none;
+}
+.scanner-viewport::before {
+  top: 10px; left: 10px;
+  border-width: 3px 0 0 3px;
+  border-radius: 4px 0 0 0;
+}
+.scanner-viewport::after {
+  bottom: 10px; right: 10px;
+  border-width: 0 3px 3px 0;
+  border-radius: 0 0 4px 0;
+}
+/* Línea de escaneo animada */
+.scan-line {
+  position: absolute;
+  left: 12px; right: 12px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amarillo), transparent);
+  border-radius: 2px;
+  animation: scan-sweep 2s ease-in-out infinite;
+  z-index: 10;
+  top: 50%;
+}
+@keyframes scan-sweep {
+  0%   { top: 12%; opacity: 1; }
+  50%  { top: 85%; opacity: 1; }
+  100% { top: 12%; opacity: 1; }
+}
+
+#qr-reader {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+/* Ocultar la UI nativa de html5-qrcode que no necesitamos */
+#qr-reader__scan_region { border: none !important; }
+#qr-reader__dashboard { display: none !important; }
+#qr-reader img { display: none !important; }
+
+.scanner-estado {
+  margin-top: 16px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--texto2);
+  text-align: center;
+  min-height: 20px;
+}
+.scanner-estado.ok  { color: var(--verde); }
+.scanner-estado.err { color: var(--naranja); }
+
+.btn-cerrar-scanner {
+  margin-top: 20px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 100px;
+  padding: 11px 32px;
+  color: var(--texto2);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-cerrar-scanner:hover { background: rgba(255,255,255,.15); color: white; }
+
+.btn-entrar {
+  width: 100%;
+  margin-top: 16px;
+  background: linear-gradient(135deg, var(--amarillo), var(--naranja));
+  border: none;
+  border-radius: var(--radio-sm);
+  padding: 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 20px rgba(255,107,53,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-entrar:active { transform: scale(.97); }
+.btn-entrar:hover  { box-shadow: 0 6px 28px rgba(255,107,53,.6); transform: translateY(-1px); }
+.btn-entrar:disabled {
+  opacity: .5; cursor: not-allowed;
+  background: #555; box-shadow: none; transform: none;
+}
+
+.login-error {
+  margin-top: 12px;
+  background: rgba(255,107,53,.15);
+  border: 1px solid rgba(255,107,53,.3);
+  border-radius: var(--radio-sm);
+  padding: 10px 14px;
+  font-size: .85rem;
+  color: var(--naranja);
+  text-align: center;
+  display: none;
+}
+.decoracion-estrellas {
+  display: flex; gap: 12px; justify-content: center; margin-top: 24px;
+}
+.deco-star {
+  font-size: 1.2rem;
+  animation: rotar 4s linear infinite;
+}
+.deco-star:nth-child(2) { animation-duration: 6s; }
+.deco-star:nth-child(3) { animation-duration: 3s; }
+@keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════════════
+   PANTALLA PRINCIPAL (ÁLBUM)
+══════════════════════════════════════════════════ */
+#pantalla-album { display: none; }
+
+/* HEADER */
+.album-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(26,26,46,.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: 12px 16px;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.header-nombre {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--texto);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.header-nombre span {
+  background: linear-gradient(90deg, var(--amarillo), var(--naranja));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.btn-salir {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--texto2);
+  font-size: .75rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-salir:hover { background: rgba(255,107,53,.2); color: var(--naranja); }
+
+/* STATS BAR */
+.stats-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.stat-chip {
+  flex: 1;
+  background: var(--carta);
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.stat-chip .num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.stat-chip .lbl {
+  font-size: .62rem;
+  font-weight: 700;
+  color: var(--texto2);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.stat-completadas .num { color: var(--verde); }
+.stat-faltantes  .num  { color: var(--rosa); }
+.stat-pct        .num  { color: var(--amarillo); }
+
+/* BARRA DE PROGRESO */
+.progress-wrap {
+  padding: 12px 16px 0;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--texto2);
+  margin-bottom: 5px;
+}
+.progress-track {
+  height: 10px;
+  background: rgba(255,255,255,.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--verde), var(--azul));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* MENSAJE MOTIVACIONAL */
+.motivacional {
+  margin: 12px 16px 0;
+  background: linear-gradient(135deg, rgba(255,217,61,.12), rgba(255,107,53,.08));
+  border: 1px solid rgba(255,217,61,.2);
+  border-radius: var(--radio-sm);
+  padding: 10px 14px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--amarillo);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* FILTROS */
+.filtros {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filtros::-webkit-scrollbar { display: none; }
+.btn-filtro {
+  background: var(--carta);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px;
+  padding: 7px 14px;
+  color: var(--texto2);
+  font-family: 'Nunito', sans-serif;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.btn-filtro.activo {
+  background: var(--morado);
+  border-color: var(--morado);
+  color: white;
+  box-shadow: 0 3px 12px rgba(124,92,191,.4);
+}
+
+/* SECCIÓN DEL ÁLBUM */
+.album-seccion {
+  padding: 12px 16px 0;
+}
+.seccion-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: var(--texto2);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.seccion-titulo span { color: var(--texto); }
+
+/* GRILLA DE TARJETAS */
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+/* TARJETA INDIVIDUAL */
+.tarjeta {
+  aspect-ratio: 2/3;
+  border-radius: var(--radio-sm);
+  position: relative;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  overflow: hidden;
+}
+.tarjeta:active { transform: scale(.93); }
+
+/* Tarjeta vacía */
+.tarjeta.vacia {
+  background: var(--carta);
+  border: 1.5px dashed rgba(255,255,255,.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.tarjeta.vacia .num-t {
+  font-family: 'Fredoka One', cursive;
+  font-size: .75rem;
+  color: rgba(255,255,255,.2);
+}
+.tarjeta.vacia .icono-vacio {
+  font-size: 1.2rem;
+  opacity: .15;
+}
+
+/* Tarjeta obtenida */
+.tarjeta.obtenida {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--carta2), var(--carta2)) padding-box,
+              linear-gradient(135deg, var(--amarillo), var(--rosa)) border-box;
+  box-shadow: 0 4px 16px rgba(255,217,61,.25);
+}
+.tarjeta.obtenida:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(255,217,61,.4);
+}
+.tarjeta.obtenida .img-t {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+.tarjeta.obtenida .overlay-t {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 50%);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.tarjeta.obtenida:hover .overlay-t { opacity: 1; }
+.overlay-t .num-t {
+  font-family: 'Fredoka One', cursive;
+  font-size: .65rem;
+  color: var(--amarillo);
+  line-height: 1;
+}
+.overlay-t .nombre-t {
+  font-size: .6rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Estrella de obtenida */
+.tarjeta.obtenida::after {
+  content: "⭐";
+  position: absolute;
+  top: 2px; right: 3px;
+  font-size: .6rem;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.5));
+}
+
+/* Imagen de fondo placeholder */
+.tarjeta.obtenida.sin-img {
+  background: linear-gradient(135deg,
+    hsl(calc(var(--idx) * 37deg), 60%, 30%),
+    hsl(calc(var(--idx) * 37deg + 40deg), 70%, 20%)
+  );
+}
+.tarjeta.obtenida.sin-img .num-t {
+  opacity: 1;
+  position: absolute;
+  bottom: 4px; left: 0; right: 0;
+  text-align: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: .7rem;
+  color: rgba(255,255,255,.8);
+}
+.tarjeta.obtenida.sin-img .overlay-t { opacity: 1; background: none; }
+
+/* MODAL DE TARJETA */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.8);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: flex-end;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.modal-overlay.visible {
+  opacity: 1; pointer-events: all;
+}
+.modal-card {
+  background: var(--carta);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  transform: translateY(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.visible .modal-card { transform: translateY(0); }
+.modal-handle {
+  width: 40px; height: 4px;
+  background: rgba(255,255,255,.2);
+  border-radius: 100px;
+  margin: 0 auto 16px;
+}
+.modal-img-wrap {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 16px;
+  aspect-ratio: 2/3;
+  border-radius: var(--radio);
+  overflow: hidden;
+  border: 2px solid rgba(255,217,61,.3);
+  background: var(--fondo3);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-img { width: 100%; height: 100%; object-fit: cover; }
+.modal-num  { font-size: 3rem; }
+.modal-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  text-align: center;
+  color: var(--amarillo);
+  margin-bottom: 4px;
+}
+.modal-sub {
+  text-align: center;
+  color: var(--texto2);
+  font-size: .85rem;
+  font-weight: 600;
+}
+.modal-badge {
+  display: flex; gap: 8px; justify-content: center; margin-top: 12px;
+}
+.badge {
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: white;
+}
+.btn-cerrar-modal {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--fondo3);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radio-sm);
+  padding: 13px;
+  color: var(--texto2);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-cerrar-modal:hover { color: white; background: rgba(255,255,255,.1); }
+
+/* RANKING */
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--carta);
+  border-radius: var(--radio-sm);
+  margin-bottom: 6px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.rank-pos {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.rank-pos.oro   { color: #FFD700; }
+.rank-pos.plata { color: #C0C0C0; }
+.rank-pos.bronce{ color: #CD7F32; }
+.rank-nombre {
+  flex: 1;
+  font-weight: 700;
+  font-size: .9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rank-chips { flex-shrink: 0; text-align: right; }
+.rank-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: var(--amarillo);
+}
+.rank-lbl {
+  font-size: .65rem;
+  color: var(--texto2);
+  font-weight: 700;
+}
+
+/* INDICADOR DE CARGA */
+.loader-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--fondo);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+.loader-overlay.visible { opacity: 1; pointer-events: all; }
+.loader-emoji { font-size: 52px; animation: bounce 1s infinite alternate; }
+@keyframes bounce {
+  from { transform: scale(1) rotate(-5deg); }
+  to   { transform: scale(1.15) rotate(5deg); }
+}
+.loader-texto {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: var(--amarillo);
+}
+.loader-dots::after {
+  content: "";
+  animation: puntos 1.5s infinite;
+}
+@keyframes puntos {
+  0%   { content: ""; }
+  33%  { content: "."; }
+  66%  { content: ".."; }
+  100% { content: "..."; }
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--verde);
+  color: #1a2e1a;
+  font-weight: 800;
+  font-size: .88rem;
+  padding: 12px 20px;
+  border-radius: 100px;
+  z-index: 400;
+  white-space: nowrap;
+  transition: transform .4s cubic-bezier(.68,-.55,.27,1.55);
+  box-shadow: 0 4px 20px rgba(107,203,119,.4);
+}
+.toast.visible { transform: translateX(-50%) translateY(0); }
+
+/* CONFETI (aparece al cargar por primera vez) */
+.confeti-wrap {
+  position: fixed; inset: 0; z-index: 500;
+  pointer-events: none;
+  overflow: hidden;
+}
+.confeti-p {
+  position: absolute;
+  top: -20px;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  animation: caer linear forwards;
+}
+@keyframes caer {
+  to { top: 110vh; transform: rotate(720deg); }
+}
+
+/* PESTAÑAS NAVEGACIÓN */
+.nav-tabs {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: rgba(26,26,46,.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  z-index: 150;
+}
+.nav-tabs.visible { display: grid; }
+.nav-tab {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 10px 0 12px;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--texto2);
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  transition: color .2s;
+  background: none; border: none;
+}
+.nav-tab.activo { color: var(--amarillo); }
+.nav-tab .icon { font-size: 1.4rem; }
+
+/* SECCIONES CONTENIDO */
+.seccion-contenido { display: none; padding: 0 0 16px; }
+.seccion-contenido.activa { display: block; }
+
+/* RESPONSIVE MICRO */
+@media(max-width: 360px) {
+  .grid-tarjetas { grid-template-columns: repeat(4, 1fr); }
+  .logo-titulo { font-size: 2.2rem; }
+}
+@media(min-width: 481px) {
+  .grid-tarjetas { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* SKELETON LOADING */
+.skeleton {
+  background: linear-gradient(90deg, var(--carta) 25%, var(--carta2) 50%, var(--carta) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ══════════════════════════════════════════════════
+   INSIGNIAS CATEKIDS
+══════════════════════════════════════════════════ */
+.ck-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(124,92,191,.25), rgba(78,205,196,.15));
+  border: 1px solid rgba(124,92,191,.35);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.ck-header-icon { font-size: 2.2rem; flex-shrink: 0; }
+.ck-header-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--texto);
+  line-height: 1.2;
+}
+.ck-header-sub {
+  font-size: .72rem;
+  color: var(--texto2);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.ck-header-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: var(--amarillo);
+  background: rgba(255,217,61,.12);
+  border: 1.5px solid rgba(255,217,61,.3);
+  border-radius: 100px;
+  padding: 4px 14px;
+}
+
+.ck-progress-wrap { margin-bottom: 16px; }
+.ck-progress-track {
+  height: 8px;
+  background: rgba(255,255,255,.07);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.ck-progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--morado), var(--azul));
+  width: 0%;
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+
+/* Grid 3x4 de insignias */
+.ck-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* Carta de insignia */
+.ck-card {
+  background: var(--carta);
+  border: 1.5px solid rgba(255,255,255,.07);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+}
+.ck-card:active { transform: scale(.95); }
+.ck-card.tiene {
+  border-color: rgba(124,92,191,.5);
+  box-shadow: 0 4px 20px rgba(124,92,191,.3);
+}
+.ck-card.tiene .ck-card-foto-wrap { opacity: 1; }
+
+/* Foto dentro de la carta */
+.ck-card-foto-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--fondo3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.ck-card-foto {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ck-card-emoji-placeholder {
+  font-size: 2.2rem;
+  opacity: .35;
+}
+/* Overlay check cuando tiene foto */
+.ck-card-check {
+  position: absolute;
+  top: 5px; right: 5px;
+  background: var(--verde);
+  color: #1a2e1a;
+  font-size: .65rem;
+  font-weight: 900;
+  border-radius: 100px;
+  padding: 2px 7px;
+  display: none;
+}
+.ck-card.tiene .ck-card-check { display: block; }
+
+/* Pie de la carta */
+.ck-card-footer {
+  padding: 7px 8px 9px;
+  text-align: center;
+}
+.ck-card-num {
+  font-size: .6rem;
+  font-weight: 800;
+  color: var(--morado);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.ck-card-nombre {
+  font-family: 'Fredoka One', cursive;
+  font-size: .78rem;
+  color: var(--texto);
+  line-height: 1.2;
+  margin-top: 1px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Botón añadir foto (en cartas sin foto) */
+.ck-card-add {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  background: var(--morado);
+  border: none;
+  border-radius: 100px;
+  width: 26px; height: 26px;
+  font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+
+/* Modal de insignia */
+.ck-modal-card { max-height: 90vh; overflow-y: auto; }
+
+.ck-modal-img-wrap {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1;
+  margin: 0 auto 16px;
+  border-radius: var(--radio);
+  overflow: hidden;
+  border: 2px solid rgba(124,92,191,.4);
+  background: var(--fondo3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.ck-modal-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.ck-modal-emoji-big { font-size: 3.5rem; }
+.ck-modal-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.ck-lock-icon { font-size: 2rem; opacity: .4; }
+.ck-lock-txt  { font-size: .75rem; color: var(--texto2); font-weight: 700; }
+
+.ck-upload-area { margin-top: 14px; }
+.ck-btn-subir {
+  width: 100%;
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  border: none;
+  border-radius: var(--radio-sm);
+  padding: 13px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(124,92,191,.4);
+}
+.ck-btn-subir:active { transform: scale(.97); }
+
+.ck-btn-borrar {
+  width: 100%;
+  margin-top: 8px;
+  background: rgba(255,107,53,.1);
+  border: 1px solid rgba(255,107,53,.25);
+  border-radius: var(--radio-sm);
+  padding: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--naranja);
+  cursor: pointer;
+  transition: all .2s;
+}
+.ck-btn-borrar:hover { background: rgba(255,107,53,.2); }
+
+/* Burbuja de comentario IA */
+.ck-ai-burbuja {
+  display: none;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(78,205,196,.12), rgba(124,92,191,.12));
+  border: 1.5px solid rgba(78,205,196,.3);
+  border-radius: 16px 16px 16px 4px;
+  padding: 12px 14px;
+  margin: 10px 0 4px;
+  animation: fadeInUp .4s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.ck-ai-icono {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.ck-ai-texto {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--texto);
+  line-height: 1.5;
+}
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.ck-card.nueva-insignia { animation: ck-pop .5s ease; }
+
+/* ══════════════════════════════════════════════════
+   UPLOAD DIRECTO EN MODAL TARJETA
+══════════════════════════════════════════════════ */
+.modal-upload-section {
+  margin-top: 12px;
+}
+.modal-img-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.btn-cambiar-foto {
+  width: 100%;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radio-sm);
+  padding: 11px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--texto2);
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-cambiar-foto:hover { background: rgba(255,255,255,.12); color: white; }
+
+/* Barra de progreso de subida */
+.upload-progress-wrap {
+  margin-top: 10px;
+  background: var(--fondo3);
+  border-radius: 100px;
+  overflow: hidden;
+  height: 8px;
+  position: relative;
+}
+.upload-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--morado), var(--azul));
+  border-radius: 100px;
+  transition: width .3s ease;
+}
+.upload-progress-txt {
+  text-align: center;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--texto2);
+  margin-top: 6px;
+}
+
+/* Botón ver imagen grande */
+.btn-ver-imagen {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255,217,61,.15), rgba(255,107,53,.1));
+  border: 1.5px solid rgba(255,217,61,.3);
+  border-radius: var(--radio-sm);
+  padding: 11px 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: .9rem;
+  color: var(--amarillo);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+}
+.btn-ver-imagen:hover { background: rgba(255,217,61,.2); }
+
+/* Botón de subir tarjeta (en modal) */
+.modal-forms-toggle {
+  width: 100%;
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  border: none;
+  border-radius: var(--radio-sm);
+  padding: 13px 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: .95rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(124,92,191,.4);
+}
+.modal-forms-toggle:active { transform: scale(.97); }
+.modal-forms-toggle:hover  { box-shadow: 0 6px 24px rgba(124,92,191,.6); }
+
+/* Lightbox imagen grande */
+.lightbox-overlay {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(0,0,0,.92);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.lightbox-overlay.visible { opacity: 1; pointer-events: all; }
+.lightbox-img {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: var(--radio);
+  box-shadow: 0 16px 64px rgba(0,0,0,.8);
+  object-fit: contain;
+}
+.lightbox-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--amarillo);
+  margin-top: 14px;
+  text-align: center;
+}
+.lightbox-close {
+  margin-top: 16px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 100px;
+  padding: 10px 28px;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.lightbox-close:hover { background: rgba(255,255,255,.2); }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<!-- ══ MODAL INSIGNIA CATEKIDS ══ -->
+<div class="modal-overlay" id="modal-ck" onclick="cerrarModalCK(event)">
+  <div class="modal-card ck-modal-card">
+    <div class="modal-handle"></div>
+
+    <!-- Imagen / placeholder -->
+    <div class="ck-modal-img-wrap" id="ck-modal-img-wrap">
+      <img class="ck-modal-img" id="ck-modal-img" src="" alt="" style="display:none">
+      <div class="ck-modal-emoji-big" id="ck-modal-emoji-big">🎖️</div>
+      <div class="ck-modal-locked" id="ck-modal-locked" style="display:none">
+        <span class="ck-lock-icon">🔒</span>
+        <span class="ck-lock-txt">Sin foto aún</span>
+      </div>
+    </div>
+
+    <div class="modal-titulo" id="ck-modal-titulo">Insignia</div>
+    <div class="modal-sub"    id="ck-modal-desc">Descripción</div>
+
+    <div class="modal-badge" style="margin-bottom:4px">
+      <span class="badge" id="ck-modal-num">#1</span>
+      <span class="badge" id="ck-modal-estado">🎯 Pendiente</span>
+    </div>
+
+    <!-- Subir foto -->
+    <div class="ck-upload-area" id="ck-upload-area">
+      <input type="file" id="ck-file-input" accept="image/*" capture="environment" style="display:none" onchange="onCKFileSelected(event)">
+      <button class="ck-btn-subir" onclick="document.getElementById('ck-file-input').click()">
+        <span id="ck-btn-subir-icon">📸</span>
+        <span id="ck-btn-subir-txt">Tomar / subir foto</span>
+      </button>
+    </div>
+
+    <!-- Ver imagen grande -->
+    <button class="btn-ver-imagen" id="ck-btn-ver" onclick="abrirLightboxCK()" style="display:none">
+      🖼️ Ver foto en grande
+    </button>
+
+    <!-- Borrar foto -->
+    <button class="ck-btn-borrar" id="ck-btn-borrar" onclick="borrarFotoCK()" style="display:none">
+      🗑️ Borrar foto
+    </button>
+
+    <button class="btn-cerrar-modal" onclick="cerrarModalCK()">Cerrar</button>
+  </div>
+</div>
+
+<!-- ══ LIGHTBOX INSIGNIA ══ -->
+<div class="lightbox-overlay" id="lightbox-ck" onclick="cerrarLightboxCK()">
+  <img class="lightbox-img" id="lightbox-ck-img" src="" alt="">
+  <div class="lightbox-titulo" id="lightbox-ck-titulo"></div>
+  <button class="lightbox-close" onclick="cerrarLightboxCK()">✕ Cerrar</button>
+</div>
+
+<!-- ══ LIGHTBOX IMAGEN ══ -->
+<div class="lightbox-overlay" id="lightbox" onclick="cerrarLightbox()">
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <div class="lightbox-titulo" id="lightbox-titulo"></div>
+  <button class="lightbox-close" onclick="cerrarLightbox()">✕ Cerrar</button>
+</div>
+
+<!-- ══ LOADER ══ -->
+<div class="loader-overlay" id="loader">
+  <div class="loader-emoji">📖</div>
+  <div class="loader-texto">Cargando tu álbum<span class="loader-dots"></span></div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══ MODAL TARJETA ══ -->
+<div class="modal-overlay" id="modal" onclick="cerrarModal(event)">
+  <div class="modal-card">
+    <div class="modal-handle"></div>
+    <div class="modal-img-wrap">
+      <img class="modal-img" id="modal-img" src="" alt="" onerror="this.style.display='none';document.getElementById('modal-emoji').style.display='block'">
+      <div class="modal-num" id="modal-emoji" style="display:none">🌟</div>
+    </div>
+    <div class="modal-titulo" id="modal-titulo"></div>
+    <div class="modal-sub"   id="modal-sub"></div>
+    <div class="modal-badge">
+      <span class="badge" id="modal-badge1"></span>
+      <span class="badge" id="modal-badge2">¡La tienes! ⭐</span>
+    </div>
+    <button class="btn-cerrar-modal" onclick="cerrarModal()">Cerrar</button>
+
+    <!-- ── SUBIR FOTO DIRECTO (tarjeta sin imagen) ── -->
+    <div class="modal-upload-section" id="modal-upload-section" style="display:none">
+      <input type="file" id="tarjeta-file-input" accept="image/*" capture="environment"
+             style="display:none" onchange="onTarjetaFileSelected(event)">
+      <button class="modal-forms-toggle" id="btn-subir-tarjeta"
+              onclick="document.getElementById('tarjeta-file-input').click()">
+        <span id="subir-tarjeta-icon">📸</span>
+        <span id="subir-tarjeta-txt">Tomar / subir foto de la tarjeta</span>
+      </button>
+      <div class="upload-progress-wrap" id="upload-progress-wrap" style="display:none">
+        <div class="upload-progress-bar" id="upload-progress-bar"></div>
+        <div class="upload-progress-txt" id="upload-progress-txt">Subiendo…</div>
+      </div>
+    </div>
+
+    <!-- ── VER IMAGEN + CAMBIAR (tarjeta con imagen) ── -->
+    <div class="modal-img-actions" id="modal-img-actions" style="display:none">
+      <button class="btn-ver-imagen" onclick="abrirLightbox()">
+        🖼️ Ver imagen en grande
+      </button>
+      <input type="file" id="tarjeta-cambiar-input" accept="image/*" capture="environment"
+             style="display:none" onchange="onTarjetaFileSelected(event)">
+      <button class="btn-cambiar-foto" onclick="document.getElementById('tarjeta-cambiar-input').click()">
+        🔄 Cambiar foto
+      </button>
+      <div class="upload-progress-wrap" id="upload-progress-wrap2" style="display:none">
+        <div class="upload-progress-bar" id="upload-progress-bar2"></div>
+        <div class="upload-progress-txt" id="upload-progress-txt2">Subiendo…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ QR SCANNER ══ -->
+<div class="scanner-overlay" id="scanner-overlay">
+  <div class="scanner-titulo">📷 Escanear código QR</div>
+  <div class="scanner-sub">Apunta la cámara al código QR de tu tarjeta</div>
+  <div class="scanner-viewport">
+    <div id="qr-reader"></div>
+    <div class="scan-line"></div>
+  </div>
+  <div class="scanner-estado" id="scanner-estado">Buscando código...</div>
+  <button class="btn-cerrar-scanner" onclick="cerrarScanner()">✕ Cancelar</button>
+</div>
+
+<!-- ══ CONFETI ══ -->
+<div class="confeti-wrap" id="confeti"></div>
+
+<!-- ══════════════════════════════════
+     PANTALLA LOGIN
+══════════════════════════════════ -->
+<div class="app" id="pantalla-login">
+  <div class="logo-area">
+    <span class="logo-emoji">✝️</span>
+    <div class="logo-titulo">CateKids<br>Álbum</div>
+    <div class="logo-sub">¡Colecciona tu fe! 🌟</div>
+  </div>
+
+  <div class="login-card">
+    <label class="login-label" for="input-codigo">🔑 Tu código especial</label>
+    <input
+      class="login-input"
+      id="input-codigo"
+      type="text"
+      maxlength="50"
+      placeholder="ABC123"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+    >
+    <div class="login-error" id="login-error">❌ Código no encontrado</div>
+    <button class="btn-entrar" id="btn-entrar" onclick="iniciarSesion()">
+      <span>¡Entrar a mi álbum!</span> 🚀
+    </button>
+    <div class="btn-scan-wrap">
+      <button class="btn-scan" id="btn-scan" onclick="abrirScanner()">
+        <span>📷</span> Escanear QR
+      </button>
+    </div>
+  </div>
+
+  <div class="decoracion-estrellas">
+    <span class="deco-star">⭐</span>
+    <span class="deco-star">✨</span>
+    <span class="deco-star">🌟</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PANTALLA ÁLBUM
+══════════════════════════════════ -->
+<div class="app" id="pantalla-album">
+
+  <!-- Header sticky -->
+  <div class="album-header">
+    <div class="header-top">
+      <div class="header-nombre">
+        👋 Hola, <span id="hdr-nombre">-</span>
+      </div>
+      <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-chip stat-completadas">
+        <div class="num" id="stat-comp">0</div>
+        <div class="lbl">✅ Tengo</div>
+      </div>
+      <div class="stat-chip stat-faltantes">
+        <div class="num" id="stat-falt">365</div>
+        <div class="lbl">🎯 Faltan</div>
+      </div>
+      <div class="stat-chip stat-pct">
+        <div class="num" id="stat-pct">0%</div>
+        <div class="lbl">🏆 Logro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Tu progreso</span>
+      <span id="prog-label">0 / 365</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Mensaje motivacional -->
+  <div class="motivacional" id="motivacional">
+    🌟 ¡Carga tu álbum para ver tus tarjetas!
+  </div>
+
+  <!-- Tabs navegación -->
+  <nav class="nav-tabs visible" id="nav-tabs" style="grid-template-columns:repeat(4,1fr)">
+    <button class="nav-tab activo" data-tab="album" onclick="cambiarTab('album', this)">
+      <span class="icon">📚</span> Álbum
+    </button>
+    <button class="nav-tab" data-tab="ranking" onclick="cambiarTab('ranking', this)">
+      <span class="icon">🏆</span> Ranking
+    </button>
+    <button class="nav-tab" data-tab="insignias-ck" onclick="cambiarTab('insignias-ck', this)">
+      <span class="icon">🎖️</span> Insignias
+    </button>
+    <button class="nav-tab" data-tab="perfil" onclick="cambiarTab('perfil', this)">
+      <span class="icon">👤</span> Perfil
+    </button>
+  </nav>
+
+  <!-- ── TAB: ÁLBUM ── -->
+  <div class="seccion-contenido activa" id="tab-album">
+    <!-- Filtros -->
+    <div class="filtros">
+      <button class="btn-filtro activo" onclick="filtrar('todos', this)">🌈 Todas</button>
+      <button class="btn-filtro" onclick="filtrar('obtenidas', this)">⭐ Obtenidas</button>
+      <button class="btn-filtro" onclick="filtrar('faltantes', this)">🎯 Faltantes</button>
+    </div>
+
+    <!-- Grilla -->
+    <div class="album-seccion">
+      <div class="seccion-titulo">📖 Mi colección <span id="conteo-visibles"></span></div>
+      <div class="grid-tarjetas" id="grid-tarjetas">
+        <!-- Se genera con JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB: RANKING ── -->
+  <div class="seccion-contenido" id="tab-ranking">
+    <div class="album-seccion">
+      <div class="seccion-titulo">🏆 Top coleccionistas <span></span></div>
+      <div id="lista-ranking">
+        <div style="text-align:center; padding:32px; color:var(--texto2)">
+          <span style="font-size:2rem">⏳</span><br>
+          Cargando ranking...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB: INSIGNIAS CATEKIDS ── -->
+  <div class="seccion-contenido" id="tab-insignias-ck">
+    <div class="album-seccion">
+
+      <!-- Header de sección -->
+      <div class="ck-header">
+        <div class="ck-header-icon">🎖️</div>
+        <div>
+          <div class="ck-header-titulo">Insignias CateKids</div>
+          <div class="ck-header-sub">Sube tu foto para cada misión completada</div>
+        </div>
+        <div class="ck-header-badge" id="ck-conteo-badge">0/12</div>
+      </div>
+
+      <!-- Barra de progreso insignias -->
+      <div class="ck-progress-wrap">
+        <div class="ck-progress-track">
+          <div class="ck-progress-fill" id="ck-progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Grid de 12 insignias -->
+      <div class="ck-grid" id="ck-grid">
+        <!-- Generado por JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── TAB: PERFIL ── -->
+  <div class="seccion-contenido" id="tab-perfil">
+    <div class="album-seccion">
+      <div class="seccion-titulo">👤 Mi perfil</div>
+
+      <div style="background:var(--carta); border-radius:var(--radio); padding:20px; border:1px solid rgba(255,255,255,.06); margin-bottom:12px;">
+        <div style="text-align:center; margin-bottom:16px;">
+          <div style="font-size:3.5rem; margin-bottom:8px;" id="perfil-emoji">🌟</div>
+          <div style="font-family:'Fredoka One',cursive; font-size:1.4rem;" id="perfil-nombre">-</div>
+          <div style="color:var(--texto2); font-size:.85rem; margin-top:2px;" id="perfil-grupo">-</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="background:var(--fondo3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Fredoka One',cursive; font-size:1.6rem; color:var(--verde);" id="perfil-comp">0</div>
+            <div style="font-size:.7rem; font-weight:700; color:var(--texto2);">TARJETAS</div>
+          </div>
+          <div style="background:var(--fondo3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Fredoka One',cursive; font-size:1.6rem; color:var(--amarillo);" id="perfil-pct">0%</div>
+            <div style="font-size:.7rem; font-weight:700; color:var(--texto2);">COMPLETADO</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; background:var(--fondo3); border-radius:10px; padding:12px; text-align:center;">
+          <div style="font-size:.75rem; font-weight:700; color:var(--texto2); margin-bottom:2px;">CATEQUISTA</div>
+          <div style="font-weight:700;" id="perfil-catequista">-</div>
+        </div>
+      </div>
+
+      <!-- Insignias -->
+      <div style="font-family:'Fredoka One',cursive; color:var(--texto2); font-size:.95rem; margin-bottom:8px;">
+        🎖️ Mis insignias
+      </div>
+      <div id="insignias-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;"></div>
+
+    </div>
+  </div>
+
+</div><!-- fin pantalla-album -->
+
+<script>
+// ══════════════════════════════════════════════════
+// CONFIGURACIÓN
+// ══════════════════════════════════════════════════
+const TOTAL = 365;
+
+// 🔧 REEMPLAZA con la URL de tu Web App de Google Apps Script
+const WEBAPP_URL = "TU_URL_DE_WEBAPP_AQUI";
+
+// 🔧 (Opcional) API key de Anthropic para comentarios IA en insignias
+// Déjalo vacío ("") para desactivar esta función
+const ANTHROPIC_API_KEY = "";
+
+// Nombres de las 365 tarjetas (personaliza con tus temas)
+const NOMBRES_TARJETAS = generarNombres();
+
+function generarNombres() {
+  const temas = [
+    "La Creación","Adán y Eva","Noé y el Arca","Abraham","Isaac","Jacob",
+    "José y sus hermanos","Moisés","La Zarza Ardiente","Las Plagas","El Mar Rojo",
+    "El Maná","Los 10 Mandamientos","El Becerro de Oro","El Tabernáculo",
+    "Josué","Gedeón","Sansón","Rut","Samuel","Saúl","David y Goliat",
+    "El Rey Salomón","El Templo de Dios","Elías el Profeta","Eliseo","Jonás",
+    "Isaías","Jeremías","Daniel en el foso","Los Tres Jóvenes","Ester",
+    "Job","Los Salmos","Los Proverbios","El Cantar de Cantares",
+    "La Anunciación","La Visitación","El Nacimiento de Jesús","Los Reyes Magos",
+    "La Huida a Egipto","Jesús en el Templo","El Bautismo de Jesús",
+    "Las Tentaciones de Jesús","Las Bodas de Caná","Los 12 Apóstoles",
+    "El Sermón de la Montaña","Las Bienaventuranzas","El Padrenuestro",
+    "La Multiplicación de Panes","Jesús camina en el agua","La Transfiguración",
+    "La Resurrección de Lázaro","Zaqueo","La Samaritana","El Buen Pastor",
+    "El Hijo Pródigo","El Buen Samaritano","La Entrada a Jerusalén",
+    "La Última Cena","La Eucaristía","Getsemaní","La Pasión de Cristo",
+    "La Crucifixión","La Resurrección","Las Apariciones","La Ascensión",
+    "Pentecostés","María Madre de Dios","San José","San Pedro","San Pablo",
+    "San Juan Apóstol","San Andrés","Santiago el Mayor","Santo Tomás",
+    "San Mateo","San Felipe","San Bartolomé","San Simón","San Judas Tadeo",
+    "San Juan Bautista","San Esteban","San Lorenzo","Santa María Magdalena",
+    "Santa Marta","Santa Ana","San Joaquín","Los Ángeles de Dios",
+    "San Miguel Arcángel","San Gabriel Arcángel","San Rafael Arcángel",
+    "La Virgen de Guadalupe","Nuestra Señora de Fátima","La Virgen del Carmen",
+    "La Inmaculada Concepción","La Asunción","Reina del Rosario",
+    "La Iglesia de Cristo","Los Sacramentos","El Bautismo","La Confirmación",
+    "La Eucaristía II","La Reconciliación","La Unción de Enfermos",
+    "El Matrimonio Cristiano","El Orden Sacerdotal","La Oración",
+    "La Fe","La Esperanza","La Caridad","La Prudencia","La Justicia",
+    "La Fortaleza","La Templanza","El Rosario","El Ave María","El Gloria",
+    "El Credo","La Señal de la Cruz","El Acto de Contrición","La Salve",
+    "El Ángelus","La Novena","La Adoración","La Bendición",
+    "La Cuaresma","El Miércoles de Ceniza","El Vía Crucis","La Semana Santa",
+    "El Domingo de Ramos","El Jueves Santo","El Viernes Santo",
+    "El Sábado de Gloria","La Vigilia Pascual","La Pascua",
+    "El Adviento","La Navidad","La Epifanía","La Sagrada Familia",
+    "La Presentación de Jesús","La Candelaria","El Corpus Christi",
+  ];
+  const arr = [];
+  for (let i = 1; i <= TOTAL; i++) {
+    arr.push(temas[i-1] || "Tarjeta " + i);
+  }
+  return arr;
+}
+
+const MENSAJES = [
+  "⚡ ¡Eres increíble! Sigue coleccionando.",
+  "🌟 ¡Tu fe crece con cada tarjeta!",
+  "🎉 ¡Cada día una nueva sorpresa!",
+  "💪 ¡Tú puedes completar el álbum!",
+  "🙏 ¡Dios te bendice en este camino!",
+  "🚀 ¡A coleccionar se ha dicho!",
+  "✨ ¡Eres un campeón de la fe!",
+  "🌈 ¡Qué hermosa colección tienes!",
+];
+
+const INSIGNIAS = [
+  { emoji:"🌱", nombre:"Primer paso", desc:"Primera tarjeta",     req: n => n >= 1   },
+  { emoji:"🔟", nombre:"Buen inicio", desc:"10 tarjetas",         req: n => n >= 10  },
+  { emoji:"⭐", nombre:"Brillante",   desc:"25 tarjetas",         req: n => n >= 25  },
+  { emoji:"🌟", nombre:"Estrella",    desc:"50 tarjetas",         req: n => n >= 50  },
+  { emoji:"🏅", nombre:"Medalla",     desc:"100 tarjetas",        req: n => n >= 100 },
+  { emoji:"🥈", nombre:"Plata",       desc:"200 tarjetas",        req: n => n >= 200 },
+  { emoji:"🥇", nombre:"Oro",         desc:"300 tarjetas",        req: n => n >= 300 },
+  { emoji:"👑", nombre:"Campeón",     desc:"¡Álbum completo!",    req: n => n >= 365 },
+];
+
+// ── 12 INSIGNIAS CATEKIDS (con foto) ──────────────────────
+const CK_INSIGNIAS = [
+  { id: 1,  emoji: "✝️",  nombre: "Elegido de Dios",      desc: "Sube tu foto del sacramento del Bautismo o tu primera comunión" },
+  { id: 2,  emoji: "🕊️", nombre: "Espíritu Santo",       desc: "Captura un momento especial de oración o misa contigo" },
+  { id: 3,  emoji: "📖",  nombre: "Guardián de la Biblia", desc: "Tómate una foto sosteniendo tu Biblia o libro de catequesis" },
+  { id: 4,  emoji: "🙏",  nombre: "Corazón Orante",        desc: "Foto tuya rezando el Rosario o en adoración" },
+  { id: 5,  emoji: "⭐",  nombre: "Estrella de Fe",         desc: "Imagen tuya en un retiro, convivio o evento de fe" },
+  { id: 6,  emoji: "🤝",  nombre: "Servidor del Bien",     desc: "Foto haciendo una obra de caridad o ayudando a alguien" },
+  { id: 7,  emoji: "🏠",  nombre: "Familia Sagrada",       desc: "Una foto bonita con tu familia en casa o en la iglesia" },
+  { id: 8,  emoji: "🎨",  nombre: "Artista de Fe",          desc: "Sube un dibujo, manualidad o trabajo que hayas hecho en catequesis" },
+  { id: 9,  emoji: "🌿",  nombre: "Guardián de la Creación","desc": "Foto cuidando la naturaleza: un árbol, plantas o limpiando" },
+  { id: 10, emoji: "💡",  nombre: "Luz del Mundo",          desc: "Foto tuya con una vela encendida en Navidad, Pascua o en misa" },
+  { id: 11, emoji: "🎉",  nombre: "Misionero Alegre",       desc: "Foto compartiendo la fe: enseñando, cantando o celebrando" },
+  { id: 12, emoji: "👑",  nombre: "Campeón CateKids",       desc: "¡Completa las 11 insignias anteriores y sube tu foto de graduación!" },
+];
+
+// ══════════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════════
+let sesion = null;  // { nombre, grupo, catequista, tarjetas[], completadas, porcentaje }
+let tarjetasData = []; // array de 365
+let filtroActual = 'todos';
+let ckInsigniaActual = null; // insignia abierta en modal CK
+
+// ══════════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════════
+document.getElementById('input-codigo').addEventListener('keydown', e => {
+  if (e.key === 'Enter') iniciarSesion();
+});
+
+async function iniciarSesion() {
+  const codigo = document.getElementById('input-codigo').value.trim().toUpperCase();
+  if (!codigo) return;
+
+  const btn = document.getElementById('btn-entrar');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Verificando...';
+  document.getElementById('login-error').style.display = 'none';
+
+  mostrarLoader(true);
+
+  try {
+    const url = `${WEBAPP_URL}?action=getAlbum&codigo=${encodeURIComponent(codigo)}`;
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    if (!data.ok) {
+      document.getElementById('login-error').textContent = data.mensaje || 'Código incorrecto 😕';
+      document.getElementById('login-error').style.display = 'block';
+      mostrarLoader(false);
+      btn.disabled = false;
+      btn.innerHTML = '¡Entrar a mi álbum! 🚀';
+      return;
+    }
+
+    sesion = data;
+    // Inicializar el mapa de fotos CK desde los datos del servidor
+    sesion.ckFotos = data.ckFotos || {};
+    tarjetasData = data.tarjetas;
+    mostrarLoader(false);
+    mostrarAlbum();
+
+  } catch (err) {
+    document.getElementById('login-error').textContent = '❌ Error de conexión. Intenta de nuevo.';
+    document.getElementById('login-error').style.display = 'block';
+    mostrarLoader(false);
+    btn.disabled = false;
+    btn.innerHTML = '¡Entrar a mi álbum! 🚀';
+  }
+}
+
+// ══════════════════════════════════════════════════
+// MOSTRAR ÁLBUM
+// ══════════════════════════════════════════════════
+function mostrarAlbum() {
+  document.getElementById('pantalla-login').style.display = 'none';
+  document.getElementById('pantalla-album').style.display = 'block';
+
+  // Header
+  document.getElementById('hdr-nombre').textContent = sesion.nombre.split(' ')[0];
+  actualizarStats();
+
+  // Perfil
+  document.getElementById('perfil-nombre').textContent = sesion.nombre;
+  document.getElementById('perfil-grupo').textContent = '📍 ' + (sesion.grupo || '-');
+  document.getElementById('perfil-catequista').textContent = sesion.catequista || '-';
+  document.getElementById('perfil-emoji').textContent = getEmojiPorProgreso(sesion.porcentaje);
+
+  // Insignias del perfil
+  renderInsignias(sesion.completadas);
+
+  // Insignias CateKids
+  renderCKInsignias();
+
+  // Grid
+  renderGrid(tarjetasData);
+
+  // Efecto entrada
+  setTimeout(() => {
+    lanzarConfeti();
+    mostrarToast('🎉 ¡Bienvenido, ' + sesion.nombre.split(' ')[0] + '!');
+  }, 400);
+}
+
+function actualizarStats() {
+  const comp = sesion.completadas;
+  const pct  = sesion.porcentaje;
+  const falt = TOTAL - comp;
+
+  document.getElementById('stat-comp').textContent = comp;
+  document.getElementById('stat-falt').textContent = falt;
+  document.getElementById('stat-pct').textContent  = pct + '%';
+  document.getElementById('prog-label').textContent = comp + ' / ' + TOTAL;
+  document.getElementById('perfil-comp').textContent = comp;
+  document.getElementById('perfil-pct').textContent  = pct + '%';
+
+  // Barra progreso animada
+  setTimeout(() => {
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }, 300);
+
+  // Mensaje motivacional
+  const msg = getMensajeMotivacional(comp, pct);
+  document.getElementById('motivacional').textContent = msg;
+}
+
+function getMensajeMotivacional(comp, pct) {
+  if (comp === 0) return '🌱 ¡Comienza tu colección! Sube tu primera tarjeta.';
+  if (pct >= 100) return '👑 ¡ÁLBUM COMPLETO! ¡Eres un campeón de la fe!';
+  if (pct >= 75)  return '🚀 ¡Ya casi terminas! ¡Increíble trabajo!';
+  if (pct >= 50)  return '🌟 ¡Ya tienes más de la mitad! ¡Sigue así!';
+  if (pct >= 25)  return '⭐ ¡Un cuarto del camino! ¡Eres genial!';
+  return MENSAJES[Math.floor(Math.random() * MENSAJES.length)];
+}
+
+function getEmojiPorProgreso(pct) {
+  if (pct >= 100) return '👑';
+  if (pct >= 75)  return '🚀';
+  if (pct >= 50)  return '🌟';
+  if (pct >= 25)  return '⭐';
+  if (pct >= 10)  return '🌱';
+  return '😊';
+}
+
+// ══════════════════════════════════════════════════
+// RENDER GRID
+// ══════════════════════════════════════════════════
+function renderGrid(tarjetas) {
+  const grid = document.getElementById('grid-tarjetas');
+  grid.innerHTML = '';
+
+  const filtradas = tarjetas.filter(t => {
+    if (filtroActual === 'obtenidas') return !!t.url;
+    if (filtroActual === 'faltantes') return !t.url;
+    return true;
+  });
+
+  document.getElementById('conteo-visibles').textContent =
+    '(' + filtradas.length + ')';
+
+  filtradas.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'tarjeta ' + (t.url ? 'obtenida' : 'vacia');
+    el.style.setProperty('--idx', t.numero);
+    el.style.animationDelay = (i * 8) + 'ms';
+
+    if (t.url) {
+      el.innerHTML = `
+        <img class="img-t" src="${t.url}" alt="${NOMBRES_TARJETAS[t.numero-1]}"
+             loading="lazy"
+             onerror="this.parentElement.classList.add('sin-img'); this.style.display='none'">
+        <div class="overlay-t">
+          <div class="num-t">#${t.numero}</div>
+          <div class="nombre-t">${NOMBRES_TARJETAS[t.numero-1]}</div>
+        </div>
+      `;
+    } else {
+      el.innerHTML = `
+        <div class="icono-vacio">🔒</div>
+        <div class="num-t">${t.numero}</div>
+      `;
+    }
+
+    el.onclick = () => abrirModal(t);
+    grid.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════
+let tarjetaModalActual = null;
+
+function abrirModal(tarjeta) {
+  tarjetaModalActual = tarjeta;
+  const nombre = NOMBRES_TARJETAS[tarjeta.numero - 1];
+  const overlay = document.getElementById('modal');
+  const imgEl   = document.getElementById('modal-img');
+  const emojiEl = document.getElementById('modal-emoji');
+
+  document.getElementById('modal-titulo').textContent = nombre;
+  document.getElementById('modal-sub').textContent    = 'Tarjeta #' + tarjeta.numero + ' de ' + TOTAL;
+  document.getElementById('modal-badge1').textContent = '#' + tarjeta.numero;
+
+  // Limpiar inputs de archivo
+  document.getElementById('tarjeta-file-input').value   = '';
+  document.getElementById('tarjeta-cambiar-input').value = '';
+  // Ocultar barras de progreso
+  document.getElementById('upload-progress-wrap').style.display  = 'none';
+  document.getElementById('upload-progress-wrap2').style.display = 'none';
+  // Reset botón subir
+  document.getElementById('subir-tarjeta-icon').textContent = '📸';
+  document.getElementById('subir-tarjeta-txt').textContent  = 'Tomar / subir foto de la tarjeta';
+  document.getElementById('btn-subir-tarjeta').disabled = false;
+
+  if (tarjeta.url) {
+    imgEl.src = tarjeta.url;
+    imgEl.style.display = 'block';
+    emojiEl.style.display = 'none';
+    document.getElementById('modal-badge2').textContent = '✅ ¡La tienes!';
+    document.getElementById('modal-badge2').style.background = 'linear-gradient(135deg,#2e7d32,#4caf50)';
+    document.getElementById('modal-upload-section').style.display = 'none';
+    document.getElementById('modal-img-actions').style.display    = 'flex';
+  } else {
+    imgEl.style.display = 'none';
+    emojiEl.style.display = 'block';
+    emojiEl.textContent = '🔒';
+    document.getElementById('modal-badge2').textContent = '🎯 ¡Te falta!';
+    document.getElementById('modal-badge2').style.background = 'linear-gradient(135deg,var(--fondo3),var(--carta2))';
+    document.getElementById('modal-upload-section').style.display = 'block';
+    document.getElementById('modal-img-actions').style.display    = 'none';
+  }
+
+  overlay.classList.add('visible');
+}
+
+// ══════════════════════════════════════════════════
+// SUBIR FOTO DE TARJETA → GOOGLE DRIVE via Apps Script
+// ══════════════════════════════════════════════════
+async function onTarjetaFileSelected(event) {
+  const file = event.target.files[0];
+  if (!file || !tarjetaModalActual || !sesion) return;
+
+  const tieneImagen = !!tarjetaModalActual.url;
+  const wrapId  = tieneImagen ? 'upload-progress-wrap2'  : 'upload-progress-wrap';
+  const barId   = tieneImagen ? 'upload-progress-bar2'   : 'upload-progress-bar';
+  const txtId   = tieneImagen ? 'upload-progress-txt2'   : 'upload-progress-txt';
+  const btnId   = 'btn-subir-tarjeta';
+
+  // Mostrar barra de progreso
+  const wrap = document.getElementById(wrapId);
+  const bar  = document.getElementById(barId);
+  const txt  = document.getElementById(txtId);
+  wrap.style.display = 'block';
+  bar.style.width    = '10%';
+  txt.textContent    = 'Preparando imagen…';
+
+  if (!tieneImagen) {
+    document.getElementById('subir-tarjeta-icon').textContent = '⏳';
+    document.getElementById('subir-tarjeta-txt').textContent  = 'Subiendo…';
+    document.getElementById(btnId).disabled = true;
+  }
+
+  try {
+    // Comprimir imagen
+    const dataUrl = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => comprimirImagen(e.target.result, 800, 0.8, res);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+
+    bar.style.width  = '40%';
+    txt.textContent  = 'Subiendo a Drive…';
+
+    // Enviar al Apps Script
+    const payload = {
+      action:   'subirTarjeta',
+      codigo:   sesion.codigo,
+      nombre:   sesion.nombre,
+      tarjeta:  tarjetaModalActual.numero,
+      imagen:   dataUrl,
+      mimeType: file.type || 'image/jpeg',
+    };
+
+    const res  = await fetch(WEBAPP_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    bar.style.width = '100%';
+
+    if (data.ok) {
+      txt.textContent = '✅ ¡Guardado en Drive!';
+
+      // Actualizar tarjeta localmente con la URL devuelta
+      tarjetaModalActual.url = data.url;
+      const idx = tarjetasData.findIndex(t => t.numero === tarjetaModalActual.numero);
+      if (idx >= 0) tarjetasData[idx].url = data.url;
+
+      mostrarToast('🌟 ¡Tarjeta #' + tarjetaModalActual.numero + ' guardada!');
+      lanzarConfeti();
+      sesion.completadas = tarjetasData.filter(t => t.url).length;
+      sesion.porcentaje  = Math.round(sesion.completadas / TOTAL * 100);
+      actualizarStats();
+
+      // Reabrir modal con la nueva imagen
+      setTimeout(() => {
+        wrap.style.display = 'none';
+        abrirModal(tarjetaModalActual);
+        renderGrid(tarjetasData);
+      }, 1000);
+
+    } else {
+      bar.style.background = 'var(--naranja)';
+      txt.textContent = '❌ ' + (data.mensaje || 'Error al subir');
+      resetBtnSubir();
+    }
+
+  } catch (err) {
+    bar.style.background = 'var(--naranja)';
+    txt.textContent = '❌ Error de conexión';
+    console.error(err);
+    resetBtnSubir();
+  }
+}
+
+function resetBtnSubir() {
+  document.getElementById('subir-tarjeta-icon').textContent = '📸';
+  document.getElementById('subir-tarjeta-txt').textContent  = 'Tomar / subir foto de la tarjeta';
+  document.getElementById('btn-subir-tarjeta').disabled = false;
+}
+
+function abrirLightbox() {
+  if (!tarjetaModalActual || !tarjetaModalActual.url) return;
+  const nombre = NOMBRES_TARJETAS[tarjetaModalActual.numero - 1];
+  document.getElementById('lightbox-img').src   = tarjetaModalActual.url;
+  document.getElementById('lightbox-titulo').textContent = '✝️ ' + nombre + ' — Tarjeta #' + tarjetaModalActual.numero;
+  document.getElementById('lightbox').classList.add('visible');
+}
+
+function cerrarLightbox() {
+  document.getElementById('lightbox').classList.remove('visible');
+}
+
+function cerrarModal(event) {
+  if (!event || event.target === document.getElementById('modal') || event.target.classList.contains('btn-cerrar-modal')) {
+    document.getElementById('modal').classList.remove('visible');
+  }
+}
+
+// ══════════════════════════════════════════════════
+// FILTROS
+// ══════════════════════════════════════════════════
+function filtrar(tipo, btn) {
+  filtroActual = tipo;
+  document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('activo'));
+  btn.classList.add('activo');
+  renderGrid(tarjetasData);
+}
+
+// ══════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════
+function cambiarTab(tab, btn) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('activo'));
+  document.querySelectorAll('.seccion-contenido').forEach(s => s.classList.remove('activa'));
+  btn.classList.add('activo');
+  document.getElementById('tab-' + tab).classList.add('activa');
+
+  if (tab === 'ranking') cargarRanking();
+}
+
+// ══════════════════════════════════════════════════
+// RANKING
+// ══════════════════════════════════════════════════
+async function cargarRanking() {
+  const el = document.getElementById('lista-ranking');
+  el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--texto2)">⏳ Cargando...</div>';
+
+  try {
+    const url  = `${WEBAPP_URL}?action=getRanking`;
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    if (!data.ok || !data.ranking.length) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--texto2)">Sin datos aún 😊</div>';
+      return;
+    }
+
+    const medallas = ['🥇','🥈','🥉'];
+    const clases   = ['oro','plata','bronce'];
+
+    el.innerHTML = data.ranking.map((item, i) => `
+      <div class="ranking-item">
+        <div class="rank-pos ${clases[i] || ''}">${medallas[i] || (i+1)}</div>
+        <div class="rank-nombre">${item.nombre}</div>
+        <div class="rank-chips">
+          <div class="rank-num">${item.tarjetas}</div>
+          <div class="rank-lbl">tarjetas</div>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--texto2)">❌ Error de conexión</div>';
+  }
+}
+
+// ══════════════════════════════════════════════════
+// INSIGNIAS
+// ══════════════════════════════════════════════════
+function renderInsignias(completadas) {
+  const grid = document.getElementById('insignias-grid');
+  grid.innerHTML = INSIGNIAS.map(ins => {
+    const ganada = ins.req(completadas);
+    return `
+      <div style="
+        background:${ganada ? 'linear-gradient(135deg,rgba(255,217,61,.2),rgba(255,107,53,.15))' : 'var(--carta)'};
+        border:1.5px solid ${ganada ? 'rgba(255,217,61,.4)' : 'rgba(255,255,255,.06)'};
+        border-radius:12px; padding:10px 6px; text-align:center;
+        opacity:${ganada ? '1' : '.4'};
+        transition: all .2s;
+      ">
+        <div style="font-size:1.6rem;">${ins.emoji}</div>
+        <div style="font-size:.6rem; font-weight:800; color:${ganada ? 'var(--amarillo)' : 'var(--texto2)'}; margin-top:3px; line-height:1.2;">
+          ${ins.nombre}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// UTILIDADES UI
+// ══════════════════════════════════════════════════
+function mostrarLoader(visible) {
+  document.getElementById('loader').classList.toggle('visible', visible);
+}
+
+function mostrarToast(msg, duracion = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), duracion);
+}
+
+function lanzarConfeti() {
+  const wrap = document.getElementById('confeti');
+  const colores = ['#FFD93D','#FF6B35','#FF6B9D','#7C5CBF','#4ECDC4','#6BCB77'];
+  wrap.innerHTML = '';
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'confeti-p';
+    p.style.cssText = `
+      left: ${Math.random()*100}%;
+      background: ${colores[Math.floor(Math.random()*colores.length)]};
+      width: ${Math.random()*8+4}px;
+      height: ${Math.random()*8+4}px;
+      animation-duration: ${Math.random()*2+1.5}s;
+      animation-delay: ${Math.random()*1}s;
+    `;
+    wrap.appendChild(p);
+  }
+  setTimeout(() => wrap.innerHTML = '', 4000);
+}
+
+function cerrarSesion() {
+  sesion = null;
+  tarjetasData = [];
+  document.getElementById('pantalla-login').style.display = '';
+  document.getElementById('pantalla-album').style.display = 'none';
+  document.getElementById('nav-tabs').classList.remove('visible');
+  document.getElementById('nav-tabs').classList.add('visible');
+  document.getElementById('input-codigo').value = '';
+  document.getElementById('btn-entrar').disabled = false;
+  document.getElementById('btn-entrar').innerHTML = '¡Entrar a mi álbum! 🚀';
+}
+
+// ══════════════════════════════════════════════════
+// ESCÁNER QR
+// ══════════════════════════════════════════════════
+let qrScanner = null;
+let scannerActivo = false;
+
+async function abrirScanner() {
+  const overlay  = document.getElementById('scanner-overlay');
+  const estadoEl = document.getElementById('scanner-estado');
+
+  overlay.classList.add('visible');
+  estadoEl.className = 'scanner-estado';
+  estadoEl.textContent = 'Iniciando cámara...';
+
+  try {
+    qrScanner = new Html5Qrcode("qr-reader");
+
+    const config = {
+      fps: 12,
+      qrbox: { width: 220, height: 220 },
+      aspectRatio: 1.0,
+      experimentalFeatures: { useBarCodeDetectorIfSupported: true }
+    };
+
+    await qrScanner.start(
+      { facingMode: "environment" }, // cámara trasera
+      config,
+      (texto) => onQRLeido(texto),
+      () => {} // ignorar errores de frame
+    );
+
+    scannerActivo = true;
+    estadoEl.textContent = 'Buscando código QR...';
+
+  } catch (err) {
+    // Si falla cámara trasera, intentar con cualquier cámara
+    try {
+      await qrScanner.start(
+        { facingMode: "user" },
+        { fps: 12, qrbox: { width: 220, height: 220 } },
+        (texto) => onQRLeido(texto),
+        () => {}
+      );
+      scannerActivo = true;
+      estadoEl.textContent = 'Buscando código QR...';
+    } catch (err2) {
+      estadoEl.className = 'scanner-estado err';
+      estadoEl.textContent = '❌ No se pudo acceder a la cámara';
+      console.error('Scanner error:', err2);
+    }
+  }
+}
+
+function onQRLeido(texto) {
+  if (!scannerActivo) return;
+  scannerActivo = false;
+
+  const estadoEl = document.getElementById('scanner-estado');
+  estadoEl.className = 'scanner-estado ok';
+  estadoEl.textContent = '✅ ¡Código detectado!';
+
+  // Vibrar si el dispositivo lo soporta
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+  // Limpiar el texto: quitar espacios, saltos de línea
+  const codigoLimpio = texto.trim().replace(/\s+/g, '').toUpperCase();
+
+  // Pequeño delay visual antes de cerrar
+  setTimeout(async () => {
+    await cerrarScanner();
+    // Poner el código en el input y entrar automáticamente
+    document.getElementById('input-codigo').value = codigoLimpio;
+    mostrarToast('📷 Código escaneado: ' + codigoLimpio);
+    setTimeout(() => iniciarSesion(), 400);
+  }, 700);
+}
+
+async function cerrarScanner() {
+  scannerActivo = false;
+  const overlay = document.getElementById('scanner-overlay');
+  overlay.classList.remove('visible');
+
+  if (qrScanner) {
+    try {
+      const state = qrScanner.getState();
+      // Estado 2 = SCANNING, Estado 3 = PAUSED
+      if (state === 2 || state === 3) {
+        await qrScanner.stop();
+      }
+      qrScanner.clear();
+    } catch (e) {
+      // ignorar errores al detener
+    }
+    qrScanner = null;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// INSIGNIAS CATEKIDS — STORAGE en Google Drive
+// ══════════════════════════════════════════════════
+
+// Las fotos CK se guardan en Drive igual que las tarjetas.
+// Se cargan junto con el álbum y se almacenan en sesion.ckFotos = { id: url }
+// Como caché local usamos sessionStorage (solo para la sesión actual, no se borra entre apps)
+
+function ckGetFotos() {
+  // Primero: datos del servidor cargados en sesion
+  if (sesion && sesion.ckFotos) return sesion.ckFotos;
+  // Fallback: caché de sesión
+  try {
+    const raw = sessionStorage.getItem('ck_' + (sesion ? sesion.codigo : ''));
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+function ckSetFoto(insId, url) {
+  if (!sesion) return;
+  if (!sesion.ckFotos) sesion.ckFotos = {};
+  sesion.ckFotos[insId] = url;
+  // Guardar en sessionStorage como caché local
+  try {
+    sessionStorage.setItem('ck_' + sesion.codigo, JSON.stringify(sesion.ckFotos));
+  } catch (e) {}
+}
+
+function ckDeleteFoto(insId) {
+  if (!sesion || !sesion.ckFotos) return;
+  delete sesion.ckFotos[insId];
+  try {
+    sessionStorage.setItem('ck_' + sesion.codigo, JSON.stringify(sesion.ckFotos));
+  } catch (e) {}
+}
+
+// ══════════════════════════════════════════════════
+// RENDER GRID CATEKIDS
+// ══════════════════════════════════════════════════
+function renderCKInsignias() {
+  const fotos = ckGetFotos();
+  const grid  = document.getElementById('ck-grid');
+  const total = CK_INSIGNIAS.length;
+  const comp  = CK_INSIGNIAS.filter(i => fotos[i.id]).length;
+
+  document.getElementById('ck-conteo-badge').textContent = comp + '/' + total;
+  setTimeout(() => {
+    document.getElementById('ck-progress-fill').style.width = Math.round(comp / total * 100) + '%';
+  }, 300);
+
+  grid.innerHTML = '';
+  CK_INSIGNIAS.forEach(ins => {
+    const foto = fotos[ins.id] || null;
+    const card = document.createElement('div');
+    card.className = 'ck-card' + (foto ? ' tiene' : '');
+    card.onclick   = () => abrirModalCK(ins);
+
+    card.innerHTML = `
+      <div class="ck-card-foto-wrap">
+        ${foto
+          ? `<img class="ck-card-foto" src="${foto}" alt="${ins.nombre}" loading="lazy">`
+          : `<div class="ck-card-emoji-placeholder">${ins.emoji}</div>`
+        }
+        <div class="ck-card-check">✓</div>
+        ${!foto ? `<button class="ck-card-add" onclick="event.stopPropagation();abrirModalCK(CK_INSIGNIAS[${ins.id-1}])">+</button>` : ''}
+      </div>
+      <div class="ck-card-footer">
+        <div class="ck-card-num">Insignia #${ins.id}</div>
+        <div class="ck-card-nombre">${ins.nombre}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// MODAL INSIGNIA CATEKIDS
+// ══════════════════════════════════════════════════
+function abrirModalCK(ins) {
+  ckInsigniaActual = ins;
+  const fotos = ckGetFotos();
+  const foto  = fotos[ins.id] || null;
+
+  document.getElementById('ck-modal-titulo').textContent = ins.nombre;
+  document.getElementById('ck-modal-desc').textContent   = ins.desc;
+  document.getElementById('ck-modal-num').textContent    = '🎖️ #' + ins.id;
+
+  const imgEl      = document.getElementById('ck-modal-img');
+  const emojiEl    = document.getElementById('ck-modal-emoji-big');
+  const lockedEl   = document.getElementById('ck-modal-locked');
+  const verBtn     = document.getElementById('ck-btn-ver');
+  const borrarBtn  = document.getElementById('ck-btn-borrar');
+  const estadoEl   = document.getElementById('ck-modal-estado');
+  const subirIcon  = document.getElementById('ck-btn-subir-icon');
+  const subirTxt   = document.getElementById('ck-btn-subir-txt');
+
+  if (foto) {
+    imgEl.src              = foto;
+    imgEl.style.display    = 'block';
+    emojiEl.style.display  = 'none';
+    lockedEl.style.display = 'none';
+    verBtn.style.display   = 'flex';
+    borrarBtn.style.display= 'block';
+    estadoEl.textContent   = '✅ ¡Completada!';
+    estadoEl.style.background = 'linear-gradient(135deg,#2e7d32,#4caf50)';
+    subirIcon.textContent  = '🔄';
+    subirTxt.textContent   = 'Cambiar foto';
+  } else {
+    imgEl.style.display    = 'none';
+    emojiEl.style.display  = 'block';
+    emojiEl.textContent    = ins.emoji;
+    lockedEl.style.display = 'flex';
+    verBtn.style.display   = 'none';
+    borrarBtn.style.display= 'none';
+    estadoEl.textContent   = '🎯 Pendiente';
+    estadoEl.style.background = 'linear-gradient(135deg,var(--fondo3),var(--carta2))';
+    subirIcon.textContent  = '📸';
+    subirTxt.textContent   = 'Tomar / subir foto';
+  }
+
+  // Limpiar input de archivo
+  document.getElementById('ck-file-input').value = '';
+
+  document.getElementById('modal-ck').classList.add('visible');
+}
+
+function cerrarModalCK(event) {
+  if (!event || event.target === document.getElementById('modal-ck') || event.target.classList.contains('btn-cerrar-modal')) {
+    document.getElementById('modal-ck').classList.remove('visible');
+    ckInsigniaActual = null;
+    ocultarComentarioIA();
+  }
+}
+
+// ══════════════════════════════════════════════════
+// SUBIR FOTO CK → GOOGLE DRIVE + COMENTARIO IA
+// ══════════════════════════════════════════════════
+function onCKFileSelected(event) {
+  const file = event.target.files[0];
+  if (!file || !ckInsigniaActual || !sesion) return;
+
+  const ins = ckInsigniaActual;
+
+  // Mostrar estado de carga en el modal
+  const subirBtn  = document.querySelector('#ck-upload-area .ck-btn-subir');
+  const subirIcon = document.getElementById('ck-btn-subir-icon');
+  const subirTxt  = document.getElementById('ck-btn-subir-txt');
+  subirBtn.disabled       = true;
+  subirIcon.textContent   = '⏳';
+  subirTxt.textContent    = 'Guardando en Drive…';
+
+  // Limpiar comentario anterior
+  ocultarComentarioIA();
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      // Comprimir
+      const dataUrl = await new Promise(res => comprimirImagen(e.target.result, 600, 0.78, res));
+
+      // Subir a Drive via Apps Script
+      const payload = {
+        action:    'subirInsignia',
+        codigo:    sesion.codigo,
+        nombre:    sesion.nombre,
+        insigniaId: ins.id,
+        insigniaNombre: ins.nombre,
+        imagen:    dataUrl,
+        mimeType:  file.type || 'image/jpeg',
+      };
+
+      const res  = await fetch(WEBAPP_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!data.ok) throw new Error(data.mensaje || 'Error al subir');
+
+      // Actualizar estado local
+      ckSetFoto(ins.id, data.url);
+
+      mostrarToast('🎖️ ¡Insignia "' + ins.nombre + '" guardada en Drive! ⭐');
+      lanzarConfeti();
+
+      // Reabrir modal con foto nueva
+      abrirModalCK(ins);
+      renderCKInsignias();
+
+      // Pedir comentario IA con la imagen
+      pedirComentarioIA(dataUrl, ins);
+
+    } catch (err) {
+      mostrarToast('❌ Error al guardar: ' + err.message);
+      subirBtn.disabled     = false;
+      subirIcon.textContent = '📸';
+      subirTxt.textContent  = 'Tomar / subir foto';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── COMENTARIO IA PARA NIÑOS ─────────────────────
+async function pedirComentarioIA(dataUrl, ins) {
+  // Mostrar burbuja de "pensando"
+  mostrarBurbujaIA('⏳', '¡Analizando tu foto…');
+
+  try {
+    const base64 = dataUrl.split(',')[1];
+    const mime   = dataUrl.split(';')[0].split(':')[1] || 'image/jpeg';
+
+    const apiKey = typeof ANTHROPIC_API_KEY !== 'undefined' ? ANTHROPIC_API_KEY : '';
+    if (!apiKey) { ocultarComentarioIA(); return; }
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:  'POST',
+      headers: {
+        'Content-Type':      'application/json',
+        'x-api-key':         apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model:      'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        system: `Eres un catequista amigable y alegre que habla con niños de 7 a 12 años de fe católica.
+Tu misión: comentario CORTO (máximo 3 oraciones), entusiasta y cálido sobre la foto que acaba de subir para su insignia "${ins.nombre}".
+La insignia: ${ins.desc}. Usa 2-3 emojis, lenguaje simple, menciona el nombre del niño, termina con una frase de aliento de fe. NUNCA digas que eres IA.`,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mime, data: base64 } },
+            { type: 'text',  text: '¡Subí mi foto para la insignia "' + ins.nombre + '"! ¿Qué te parece?' }
+          ]
+        }]
+      })
+    });
+
+    const json    = await res.json();
+    const mensaje = json?.content?.[0]?.text || null;
+
+    if (mensaje) {
+      mostrarBurbujaIA('🌟', mensaje);
+    } else {
+      ocultarComentarioIA();
+    }
+  } catch (err) {
+    ocultarComentarioIA();
+  }
+}
+
+function mostrarBurbujaIA(icono, texto) {
+  let burbuja = document.getElementById('ck-ai-burbuja');
+  if (!burbuja) {
+    // Crear e insertar después del modal-badge
+    burbuja = document.createElement('div');
+    burbuja.id = 'ck-ai-burbuja';
+    burbuja.className = 'ck-ai-burbuja';
+    // Insertar antes del botón borrar
+    const borrarBtn = document.getElementById('ck-btn-borrar');
+    borrarBtn.parentNode.insertBefore(burbuja, borrarBtn);
+  }
+  burbuja.innerHTML = `
+    <div class="ck-ai-icono">${icono}</div>
+    <div class="ck-ai-texto">${texto}</div>
+  `;
+  burbuja.style.display = 'flex';
+}
+
+function ocultarComentarioIA() {
+  const b = document.getElementById('ck-ai-burbuja');
+  if (b) b.style.display = 'none';
+}
+
+function comprimirImagen(dataUrl, maxPx, calidad, callback) {
+  const img = new Image();
+  img.onload = () => {
+    const canvas  = document.createElement('canvas');
+    let w = img.width, h = img.height;
+    if (w > h) { if (w > maxPx) { h = Math.round(h * maxPx / w); w = maxPx; } }
+    else        { if (h > maxPx) { w = Math.round(w * maxPx / h); h = maxPx; } }
+    canvas.width  = w;
+    canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', calidad));
+  };
+  img.src = dataUrl;
+}
+
+async function borrarFotoCK() {
+  if (!ckInsigniaActual || !sesion) return;
+  if (!confirm('¿Borrar la foto de esta insignia?')) return;
+
+  try {
+    // Notificar al servidor para borrar el archivo de Drive (opcional, recomendado)
+    await fetch(WEBAPP_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        action:     'borrarInsignia',
+        codigo:     sesion.codigo,
+        insigniaId: ckInsigniaActual.id,
+      }),
+    }).catch(() => {}); // Si falla la petición, igual borramos localmente
+  } catch (e) {}
+
+  ckDeleteFoto(ckInsigniaActual.id);
+  ocultarComentarioIA();
+  mostrarToast('🗑️ Foto eliminada');
+  abrirModalCK(ckInsigniaActual);
+  renderCKInsignias();
+}
+
+// ══════════════════════════════════════════════════
+// LIGHTBOX INSIGNIA CK
+// ══════════════════════════════════════════════════
+function abrirLightboxCK() {
+  if (!ckInsigniaActual) return;
+  const fotos = ckGetFotos();
+  const foto  = fotos[ckInsigniaActual.id];
+  if (!foto) return;
+  document.getElementById('lightbox-ck-img').src    = foto;
+  document.getElementById('lightbox-ck-titulo').textContent = ckInsigniaActual.emoji + ' ' + ckInsigniaActual.nombre;
+  document.getElementById('lightbox-ck').classList.add('visible');
+}
+
+function cerrarLightboxCK() {
+  document.getElementById('lightbox-ck').classList.remove('visible');
+}
+</script>
+</body>
+</html>

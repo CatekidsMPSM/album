@@ -1351,53 +1351,79 @@ body {
 <!-- ══ TOAST ══ -->
 <div class="toast" id="toast"></div>
 
-<!-- ══ MODAL TARJETA ══ -->
-<div class="modal-overlay" id="modal" onclick="cerrarModal(event)">
-  <div class="modal-card">
-    <div class="modal-handle"></div>
-    <div class="modal-img-wrap">
-      <img class="modal-img" id="modal-img" src="" alt="" onerror="this.style.display='none';document.getElementById('modal-emoji').style.display='block'">
-      <div class="modal-num" id="modal-emoji" style="display:none">🌟</div>
-    </div>
-    <div class="modal-titulo" id="modal-titulo"></div>
-    <div class="modal-sub"   id="modal-sub"></div>
-    <div class="modal-badge">
-      <span class="badge" id="modal-badge1"></span>
-      <span class="badge" id="modal-badge2">¡La tienes! ⭐</span>
-    </div>
-    <button class="btn-cerrar-modal" onclick="cerrarModal()">Cerrar</button>
+<!-- ══ SPLASH TARJETA (estilo Facebook) ══ -->
+<div class="splash-overlay" id="modal" onclick="cerrarModal(event)">
+  <div class="splash-card" id="splash-card">
 
-    <!-- ── SUBIR FOTO DIRECTO (tarjeta sin imagen) ── -->
-    <div class="modal-upload-section" id="modal-upload-section" style="display:none">
-      <input type="file" id="tarjeta-file-input" accept="image/*" capture="environment"
-             style="display:none" onchange="onTarjetaFileSelected(event)">
-      <button class="modal-forms-toggle" id="btn-subir-tarjeta"
-              onclick="document.getElementById('tarjeta-file-input').click()">
-        <span id="subir-tarjeta-icon">📸</span>
-        <span id="subir-tarjeta-txt">Tomar / subir foto de la tarjeta</span>
-      </button>
-      <div class="upload-progress-wrap" id="upload-progress-wrap" style="display:none">
-        <div class="upload-progress-bar" id="upload-progress-bar"></div>
-        <div class="upload-progress-txt" id="upload-progress-txt">Subiendo…</div>
+    <!-- Imagen hero a pantalla completa arriba -->
+    <div class="splash-img-wrap" id="splash-img-wrap">
+      <img class="splash-img" id="modal-img" src="" alt=""
+           onerror="this.style.display='none';document.getElementById('splash-placeholder').style.display='flex'">
+      <div class="splash-placeholder" id="splash-placeholder" style="display:none">
+        <div class="splash-lock" id="modal-emoji">🔒</div>
       </div>
+      <!-- Badge número arriba izquierda -->
+      <div class="splash-num-badge" id="modal-badge1"></div>
+      <!-- Botón cerrar -->
+      <button class="splash-close" onclick="cerrarModal()">✕</button>
+      <!-- Gradient overlay abajo -->
+      <div class="splash-img-gradient"></div>
     </div>
 
-    <!-- ── VER IMAGEN + CAMBIAR (tarjeta con imagen) ── -->
-    <div class="modal-img-actions" id="modal-img-actions" style="display:none">
-      <button class="btn-ver-imagen" onclick="abrirLightbox()">
-        🖼️ Ver imagen en grande
-      </button>
-      <input type="file" id="tarjeta-cambiar-input" accept="image/*" capture="environment"
-             style="display:none" onchange="onTarjetaFileSelected(event)">
-      <button class="btn-cambiar-foto" onclick="document.getElementById('tarjeta-cambiar-input').click()">
-        🔄 Cambiar foto
-      </button>
-      <div class="upload-progress-wrap" id="upload-progress-wrap2" style="display:none">
-        <div class="upload-progress-bar" id="upload-progress-bar2"></div>
-        <div class="upload-progress-txt" id="upload-progress-txt2">Subiendo…</div>
+    <!-- Contenido deslizable debajo de la imagen -->
+    <div class="splash-body">
+
+      <!-- Nombre del santo -->
+      <div class="splash-titulo" id="modal-titulo">Tarjeta</div>
+      <div class="splash-sub"    id="modal-sub"></div>
+      <div class="splash-estado-badge" id="modal-badge2"></div>
+
+      <!-- Info del santo (generada por IA al abrir) -->
+      <div class="splash-info-wrap" id="splash-info-wrap" style="display:none">
+        <div class="splash-info-loading" id="splash-info-loading">
+          <div class="splash-spinner"></div>
+          <span>Buscando info del santo…</span>
+        </div>
+        <div class="splash-info-content" id="splash-info-content" style="display:none">
+          <div class="splash-info-frase" id="splash-info-frase"></div>
+          <div class="splash-info-grid">
+            <div class="splash-info-item"><span class="sii-label">📅 Fiesta</span><span class="sii-val" id="splash-fiesta"></span></div>
+            <div class="splash-info-item"><span class="sii-label">📍 Origen</span><span class="sii-val" id="splash-origen"></span></div>
+            <div class="splash-info-item"><span class="sii-label">✝️ Patrón de</span><span class="sii-val" id="splash-patron"></span></div>
+          </div>
+          <div class="splash-info-dato" id="splash-info-dato"></div>
+        </div>
       </div>
-    </div>
 
+      <!-- Subir foto (sin imagen) -->
+      <div class="modal-upload-section" id="modal-upload-section" style="display:none">
+        <input type="file" id="tarjeta-file-input" accept="image/*" capture="environment"
+               style="display:none" onchange="onTarjetaFileSelected(event)">
+        <button class="modal-forms-toggle" id="btn-subir-tarjeta"
+                onclick="document.getElementById('tarjeta-file-input').click()">
+          <span id="subir-tarjeta-icon">📸</span>
+          <span id="subir-tarjeta-txt">Tomar / subir foto de la tarjeta</span>
+        </button>
+        <div class="upload-progress-wrap" id="upload-progress-wrap" style="display:none">
+          <div class="upload-progress-bar" id="upload-progress-bar"></div>
+          <div class="upload-progress-txt" id="upload-progress-txt">Subiendo…</div>
+        </div>
+      </div>
+
+      <!-- Cambiar foto (con imagen) -->
+      <div class="modal-img-actions" id="modal-img-actions" style="display:none">
+        <input type="file" id="tarjeta-cambiar-input" accept="image/*" capture="environment"
+               style="display:none" onchange="onTarjetaFileSelected(event)">
+        <button class="btn-cambiar-foto" onclick="document.getElementById('tarjeta-cambiar-input').click()">
+          🔄 Cambiar foto
+        </button>
+        <div class="upload-progress-wrap" id="upload-progress-wrap2" style="display:none">
+          <div class="upload-progress-bar" id="upload-progress-bar2"></div>
+          <div class="upload-progress-txt" id="upload-progress-txt2">Subiendo…</div>
+        </div>
+      </div>
+
+    </div><!-- /splash-body -->
   </div>
 </div>
 
@@ -1622,7 +1648,7 @@ body {
 const TOTAL = 365;
 
 // 🔧 REEMPLAZA con la URL de tu Web App de Google Apps Script
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxqFb_3Rpu7gj5aEJhHmJERxeATisCMxEt1huIiTovNc2niHXnSNhspi-HGU3t1Oxw/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbylZ7a_C81_X3UCkaySodBWeORLXuxJrUFKPCwH-d7MOgJaNnKktFrFv-K64wM5kFE/exec";
 
 // 🔧 (Opcional) API key de Anthropic para comentarios IA en insignias
 // Déjalo vacío ("") para desactivar esta función
@@ -1718,17 +1744,17 @@ const INSIGNIAS = [
 
 // ── 12 INSIGNIAS CATEKIDS (con foto) ──────────────────────
 const CK_INSIGNIAS = [
-  { id: 1,  emoji: "✝️",  nombre: "SAN JUDAS TADEO",      desc: "Sube tu foto del sacramento del Bautismo o tu primera comunión" },
-  { id: 2,  emoji: "🕊️", nombre: "TODOS SANTOS",       desc: "Captura un momento especial de oración o misa contigo" },
-  { id: 3,  emoji: "📖",  nombre: "CRISTO REY", desc: "Tómate una foto sosteniendo tu Biblia o libro de catequesis" },
-  { id: 4,  emoji: "🙏",  nombre: "VIRGEN DE GUADALUPE",        desc: "Foto tuya rezando el Rosario o en adoración" },
-  { id: 5,  emoji: "⭐",  nombre: "ADVIENTO",         desc: "Imagen tuya en un retiro, convivio o evento de fe" },
-  { id: 6,  emoji: "🤝",  nombre: "NAVIDAD",     desc: "Foto haciendo una obra de caridad o ayudando a alguien" },
-  { id: 7,  emoji: "🏠",  nombre: "MIERCOLES DE CENIZA",       desc: "Una foto bonita con tu familia en casa o en la iglesia" },
-  { id: 8,  emoji: "🎨",  nombre: "DOMINGO DE RAMOS",          desc: "Sube un dibujo, manualidad o trabajo que hayas hecho en catequesis" },
-  { id: 9,  emoji: "🌿",  nombre: "TRIDUO PASCUAL","desc": "Foto cuidando la naturaleza: un árbol, plantas o limpiando" },
-  { id: 10, emoji: "💡",  nombre: "EL SEÑOR DE LA MISERICORDIA",          desc: "Foto tuya con una vela encendida en Navidad, Pascua o en misa" },
-  { id: 11, emoji: "🎉",  nombre: "PENTECOSTES",       desc: "Foto compartiendo la fe: enseñando, cantando o celebrando" },
+  { id: 1,  emoji: "✝️",  nombre: "Elegido de Dios",      desc: "Sube tu foto del sacramento del Bautismo o tu primera comunión" },
+  { id: 2,  emoji: "🕊️", nombre: "Espíritu Santo",       desc: "Captura un momento especial de oración o misa contigo" },
+  { id: 3,  emoji: "📖",  nombre: "Guardián de la Biblia", desc: "Tómate una foto sosteniendo tu Biblia o libro de catequesis" },
+  { id: 4,  emoji: "🙏",  nombre: "Corazón Orante",        desc: "Foto tuya rezando el Rosario o en adoración" },
+  { id: 5,  emoji: "⭐",  nombre: "Estrella de Fe",         desc: "Imagen tuya en un retiro, convivio o evento de fe" },
+  { id: 6,  emoji: "🤝",  nombre: "Servidor del Bien",     desc: "Foto haciendo una obra de caridad o ayudando a alguien" },
+  { id: 7,  emoji: "🏠",  nombre: "Familia Sagrada",       desc: "Una foto bonita con tu familia en casa o en la iglesia" },
+  { id: 8,  emoji: "🎨",  nombre: "Artista de Fe",          desc: "Sube un dibujo, manualidad o trabajo que hayas hecho en catequesis" },
+  { id: 9,  emoji: "🌿",  nombre: "Guardián de la Creación","desc": "Foto cuidando la naturaleza: un árbol, plantas o limpiando" },
+  { id: 10, emoji: "💡",  nombre: "Luz del Mundo",          desc: "Foto tuya con una vela encendida en Navidad, Pascua o en misa" },
+  { id: 11, emoji: "🎉",  nombre: "Misionero Alegre",       desc: "Foto compartiendo la fe: enseñando, cantando o celebrando" },
   { id: 12, emoji: "👑",  nombre: "Campeón CateKids",       desc: "¡Completa las 11 insignias anteriores y sube tu foto de graduación!" },
 ];
 
@@ -1778,7 +1804,9 @@ async function iniciarSesion() {
     // Normalizar URLs de tarjetas para garantizar formato thumbnail
     if (sesion.tarjetas) {
       sesion.tarjetas = sesion.tarjetas.map(t => ({
-        ...t, url: t.url ? driveImg(t.url) : null
+        ...t,
+        url:    t.url    ? driveImg(t.url) : null,
+        nombre: t.nombre || null,
       }));
     }
     if (sesion.ckFotos) {
@@ -1896,18 +1924,18 @@ function renderGrid(tarjetas) {
 
     if (t.url) {
       el.innerHTML = `
-        <img class="img-t" src="${driveImg(t.url)}" alt="${NOMBRES_TARJETAS[t.numero-1]}"
-             loading="lazy" crossorigin="anonymous"
-             onerror="this.src='https://drive.google.com/thumbnail?id='+encodeURIComponent('${t.url}'.split('id=')[1]||'')+'&sz=w400'; this.onerror=function(){this.parentElement.classList.add('sin-img');this.style.display='none'}">
+        <img class="img-t" src="${driveImg(t.url)}" alt="Tarjeta ${String(t.numero).padStart(3,'0')}"
+             loading="lazy"
+             onerror="this.parentElement.classList.add('sin-img');this.style.display='none'">
         <div class="overlay-t">
-          <div class="num-t">#${t.numero}</div>
-          <div class="nombre-t">${NOMBRES_TARJETAS[t.numero-1]}</div>
+          <div class="num-t">${String(t.numero).padStart(3,'0')}</div>
+          ${t.nombre ? `<div class="nombre-t">${t.nombre}</div>` : ''}
         </div>
       `;
     } else {
       el.innerHTML = `
         <div class="icono-vacio">🔒</div>
-        <div class="num-t">${t.numero}</div>
+        <div class="num-t vacia-num">${String(t.numero).padStart(3,'0')}</div>
       `;
     }
 
@@ -1923,46 +1951,116 @@ let tarjetaModalActual = null;
 
 function abrirModal(tarjeta) {
   tarjetaModalActual = tarjeta;
-  const nombre = NOMBRES_TARJETAS[tarjeta.numero - 1];
+  const numStr  = String(tarjeta.numero).padStart(3, '0');
+  const nombre  = tarjeta.nombre || null; // nombre del santo si ya tiene foto
   const overlay = document.getElementById('modal');
   const imgEl   = document.getElementById('modal-img');
-  const emojiEl = document.getElementById('modal-emoji');
+  const ph      = document.getElementById('splash-placeholder');
 
-  document.getElementById('modal-titulo').textContent = nombre;
-  document.getElementById('modal-sub').textContent    = 'Tarjeta #' + tarjeta.numero + ' de ' + TOTAL;
-  document.getElementById('modal-badge1').textContent = '#' + tarjeta.numero;
+  // Número y sub
+  document.getElementById('modal-badge1').textContent = numStr;
+  document.getElementById('modal-sub').textContent    = 'Tarjeta ' + numStr + ' de 365';
 
-  // Limpiar inputs de archivo
-  document.getElementById('tarjeta-file-input').value   = '';
+  // Reset uploads
+  document.getElementById('tarjeta-file-input').value    = '';
   document.getElementById('tarjeta-cambiar-input').value = '';
-  // Ocultar barras de progreso
   document.getElementById('upload-progress-wrap').style.display  = 'none';
   document.getElementById('upload-progress-wrap2').style.display = 'none';
-  // Reset botón subir
   document.getElementById('subir-tarjeta-icon').textContent = '📸';
   document.getElementById('subir-tarjeta-txt').textContent  = 'Tomar / subir foto de la tarjeta';
   document.getElementById('btn-subir-tarjeta').disabled = false;
 
+  // Reset splash info
+  document.getElementById('splash-info-wrap').style.display    = 'none';
+  document.getElementById('splash-info-loading').style.display = 'flex';
+  document.getElementById('splash-info-content').style.display = 'none';
+
   if (tarjeta.url) {
-    imgEl.src = driveImg(tarjeta.url);
-    imgEl.crossOrigin = 'anonymous';
+    imgEl.src           = driveImg(tarjeta.url);
     imgEl.style.display = 'block';
-    emojiEl.style.display = 'none';
-    document.getElementById('modal-badge2').textContent = '✅ ¡La tienes!';
-    document.getElementById('modal-badge2').style.background = 'linear-gradient(135deg,#2e7d32,#4caf50)';
+    ph.style.display    = 'none';
+    // Título: nombre del santo o número mientras carga
+    document.getElementById('modal-titulo').textContent = nombre || ('Tarjeta ' + numStr);
+    const b2 = document.getElementById('modal-badge2');
+    b2.textContent        = '✅ ¡La tienes!';
+    b2.style.background   = 'linear-gradient(135deg,#2e7d32,#4caf50)';
+    b2.style.color        = 'white';
     document.getElementById('modal-upload-section').style.display = 'none';
     document.getElementById('modal-img-actions').style.display    = 'flex';
+
+    // Mostrar splash info y pedir datos del santo por IA
+    if (nombre) {
+      document.getElementById('splash-info-wrap').style.display = 'block';
+      pedirInfoSanto(nombre);
+    }
   } else {
     imgEl.style.display = 'none';
-    emojiEl.style.display = 'block';
-    emojiEl.textContent = '🔒';
-    document.getElementById('modal-badge2').textContent = '🎯 ¡Te falta!';
-    document.getElementById('modal-badge2').style.background = 'linear-gradient(135deg,var(--fondo3),var(--carta2))';
+    ph.style.display    = 'flex';
+    document.getElementById('modal-titulo').textContent = 'Tarjeta ' + numStr;
+    const b2 = document.getElementById('modal-badge2');
+    b2.textContent        = '🎯 ¡Te falta!';
+    b2.style.background   = 'rgba(255,255,255,.07)';
+    b2.style.color        = 'var(--texto2)';
     document.getElementById('modal-upload-section').style.display = 'block';
     document.getElementById('modal-img-actions').style.display    = 'none';
   }
 
   overlay.classList.add('visible');
+}
+
+// Info del santo via IA (Claude)
+async function pedirInfoSanto(nombreSanto) {
+  const infoWrap    = document.getElementById('splash-info-wrap');
+  const loading     = document.getElementById('splash-info-loading');
+  const content     = document.getElementById('splash-info-content');
+  infoWrap.style.display    = 'block';
+  loading.style.display     = 'flex';
+  content.style.display     = 'none';
+
+  const apiKey = typeof ANTHROPIC_API_KEY !== 'undefined' ? ANTHROPIC_API_KEY : '';
+  if (!apiKey) { infoWrap.style.display = 'none'; return; }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 250,
+        system: 'Eres un experto en hagiografía. Responde SOLO con JSON válido, sin markdown ni texto extra.',
+        messages: [{
+          role: 'user',
+          content: `Sobre el santo/beato llamado "${nombreSanto}", dame un JSON con exactamente estas claves:
+{"frase":"una frase corta inspiradora o virtud principal (máx 20 palabras)","fiesta":"fecha de su fiesta litúrgica","origen":"país o ciudad de origen","patron":"de qué es patrón (máx 8 palabras)","dato":"un dato curioso breve para niños (máx 25 palabras)"}
+Si no es un santo conocido, inventa datos coherentes con el nombre.`
+        }]
+      })
+    });
+    const data = await res.json();
+    const txt  = data?.content?.[0]?.text || '{}';
+    const info = JSON.parse(txt.replace(/```json|```/g, '').trim());
+
+    document.getElementById('splash-info-frase').textContent  = info.frase  || '';
+    document.getElementById('splash-fiesta').textContent      = info.fiesta  || '—';
+    document.getElementById('splash-origen').textContent      = info.origen  || '—';
+    document.getElementById('splash-patron').textContent      = info.patron  || '—';
+    document.getElementById('splash-info-dato').textContent   = info.dato   || '';
+
+    loading.style.display  = 'none';
+    content.style.display  = 'block';
+  } catch (e) {
+    infoWrap.style.display = 'none';
+  }
+}
+
+function cerrarModal(event) {
+  if (!event || event.target === document.getElementById('modal') || event.target.classList.contains('splash-close')) {
+    document.getElementById('modal').classList.remove('visible');
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -1972,28 +2070,31 @@ async function onTarjetaFileSelected(event) {
   const file = event.target.files[0];
   if (!file || !tarjetaModalActual || !sesion) return;
 
-  const tieneImagen = !!tarjetaModalActual.url;
-  const wrapId  = tieneImagen ? 'upload-progress-wrap2'  : 'upload-progress-wrap';
-  const barId   = tieneImagen ? 'upload-progress-bar2'   : 'upload-progress-bar';
-  const txtId   = tieneImagen ? 'upload-progress-txt2'   : 'upload-progress-txt';
-  const btnId   = 'btn-subir-tarjeta';
+  // Pedir el nombre del santo antes de subir
+  const numStr     = String(tarjetaModalActual.numero).padStart(3, '0');
+  const nombreSanto = prompt(`¿Cómo se llama el santo de la tarjeta ${numStr}?\n(Escribe el nombre y presiona OK)`, tarjetaModalActual.nombre || '');
+  if (nombreSanto === null) return; // canceló
 
-  // Mostrar barra de progreso
+  const tieneImagen = !!tarjetaModalActual.url;
+  const wrapId  = tieneImagen ? 'upload-progress-wrap2' : 'upload-progress-wrap';
+  const barId   = tieneImagen ? 'upload-progress-bar2'  : 'upload-progress-bar';
+  const txtId   = tieneImagen ? 'upload-progress-txt2'  : 'upload-progress-txt';
+
   const wrap = document.getElementById(wrapId);
   const bar  = document.getElementById(barId);
   const txt  = document.getElementById(txtId);
   wrap.style.display = 'block';
   bar.style.width    = '10%';
+  bar.style.background = '';
   txt.textContent    = 'Preparando imagen…';
 
   if (!tieneImagen) {
     document.getElementById('subir-tarjeta-icon').textContent = '⏳';
     document.getElementById('subir-tarjeta-txt').textContent  = 'Subiendo…';
-    document.getElementById(btnId).disabled = true;
+    document.getElementById('btn-subir-tarjeta').disabled = true;
   }
 
   try {
-    // Comprimir imagen
     const dataUrl = await new Promise((res, rej) => {
       const reader = new FileReader();
       reader.onload = e => comprimirImagen(e.target.result, 800, 0.8, res);
@@ -2001,17 +2102,17 @@ async function onTarjetaFileSelected(event) {
       reader.readAsDataURL(file);
     });
 
-    bar.style.width  = '40%';
-    txt.textContent  = 'Subiendo a Drive…';
+    bar.style.width = '40%';
+    txt.textContent = 'Subiendo a Drive…';
 
-    // Enviar al Apps Script
     const payload = {
-      action:   'subirTarjeta',
-      codigo:   sesion.codigo,
-      nombre:   sesion.nombre,
-      tarjeta:  tarjetaModalActual.numero,
-      imagen:   dataUrl,
-      mimeType: file.type || 'image/jpeg',
+      action:       'subirTarjeta',
+      codigo:       sesion.codigo,
+      nombre:       sesion.nombre,
+      tarjeta:      tarjetaModalActual.numero,
+      nombreSanto:  nombreSanto.trim() || ('Tarjeta ' + numStr),
+      imagen:       dataUrl,
+      mimeType:     file.type || 'image/jpeg',
     };
 
     const res  = await fetch(WEBAPP_URL, {
@@ -2020,29 +2121,31 @@ async function onTarjetaFileSelected(event) {
       body:    JSON.stringify(payload),
     });
     const data = await res.json();
-
     bar.style.width = '100%';
 
     if (data.ok) {
-      txt.textContent = '✅ ¡Guardado en Drive!';
+      txt.textContent = '✅ ¡Guardado!';
 
-      // Actualizar tarjeta localmente con la URL devuelta
-      tarjetaModalActual.url = data.url;
+      // Actualizar tarjeta localmente
+      tarjetaModalActual.url    = data.url;
+      tarjetaModalActual.nombre = data.nombreSanto || nombreSanto.trim();
       const idx = tarjetasData.findIndex(t => t.numero === tarjetaModalActual.numero);
-      if (idx >= 0) tarjetasData[idx].url = data.url;
+      if (idx >= 0) {
+        tarjetasData[idx].url    = data.url;
+        tarjetasData[idx].nombre = tarjetaModalActual.nombre;
+      }
 
-      mostrarToast('🌟 ¡Tarjeta #' + tarjetaModalActual.numero + ' guardada!');
+      mostrarToast('🌟 ¡' + tarjetaModalActual.nombre + ' guardado!');
       lanzarConfeti();
       sesion.completadas = tarjetasData.filter(t => t.url).length;
       sesion.porcentaje  = Math.round(sesion.completadas / TOTAL * 100);
       actualizarStats();
 
-      // Reabrir modal con la nueva imagen
       setTimeout(() => {
         wrap.style.display = 'none';
         abrirModal(tarjetaModalActual);
         renderGrid(tarjetasData);
-      }, 1000);
+      }, 900);
 
     } else {
       bar.style.background = 'var(--naranja)';
@@ -2053,7 +2156,6 @@ async function onTarjetaFileSelected(event) {
   } catch (err) {
     bar.style.background = 'var(--naranja)';
     txt.textContent = '❌ Error de conexión';
-    console.error(err);
     resetBtnSubir();
   }
 }

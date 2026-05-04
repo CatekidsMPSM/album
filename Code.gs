@@ -20,7 +20,7 @@ const CONFIG = {
   CACHE_SEGUNDOS:   300,
   // 🔧 REEMPLAZA con el ID de la carpeta de Drive donde se guardarán las fotos
   // (crea una carpeta en Drive, ábrela, y el ID está en la URL: drive.google.com/drive/folders/ESTE_ID)
-  DRIVE_FOLDER_ID:  "TU_ID_DE_CARPETA_DRIVE",
+  DRIVE_FOLDER_ID:  "https://drive.google.com/drive/folders/1enf3nyoSA1dTSvhTKLk5Bzz-BZWTjha8pu9H1Zn_r1WIT7NWfdAU2hnvUx9Q0Y3j_pR4Mb33?usp=drive_link",
 };
 
 // Columnas en "Respuestas de formulario 1" (base 1)

@@ -1622,11 +1622,28 @@ body {
 const TOTAL = 365;
 
 // 🔧 REEMPLAZA con la URL de tu Web App de Google Apps Script
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw5gZdbv9gjYvm-GNppfSTdA1hl0JC01t8Wu-4VwX-OGdraEAjK2KrJxrEucBxAJMg/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxqFb_3Rpu7gj5aEJhHmJERxeATisCMxEt1huIiTovNc2niHXnSNhspi-HGU3t1Oxw/exec";
 
 // 🔧 (Opcional) API key de Anthropic para comentarios IA en insignias
 // Déjalo vacío ("") para desactivar esta función
 const ANTHROPIC_API_KEY = "";
+
+// Convierte cualquier URL de Drive al formato thumbnail (funciona cross-origin)
+function driveImg(url) {
+  if (!url) return '';
+  // Ya es thumbnail → devolver tal cual
+  if (url.includes('thumbnail?id=')) return url;
+  // Formato uc?export=view&id=XXX
+  let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600';
+  // Formato /d/XXX/
+  m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600';
+  // Lh3 (ya procesado por Drive)
+  if (url.includes('lh3.googleusercontent')) return url;
+  return url;
+}
+
 
 // Nombres de las 365 tarjetas (personaliza con tus temas)
 const NOMBRES_TARJETAS = generarNombres();
@@ -1701,17 +1718,17 @@ const INSIGNIAS = [
 
 // ── 12 INSIGNIAS CATEKIDS (con foto) ──────────────────────
 const CK_INSIGNIAS = [
-  { id: 1,  emoji: "✝️",  nombre: "Elegido de Dios",      desc: "Sube tu foto del sacramento del Bautismo o tu primera comunión" },
-  { id: 2,  emoji: "🕊️", nombre: "Espíritu Santo",       desc: "Captura un momento especial de oración o misa contigo" },
-  { id: 3,  emoji: "📖",  nombre: "Guardián de la Biblia", desc: "Tómate una foto sosteniendo tu Biblia o libro de catequesis" },
-  { id: 4,  emoji: "🙏",  nombre: "Corazón Orante",        desc: "Foto tuya rezando el Rosario o en adoración" },
-  { id: 5,  emoji: "⭐",  nombre: "Estrella de Fe",         desc: "Imagen tuya en un retiro, convivio o evento de fe" },
-  { id: 6,  emoji: "🤝",  nombre: "Servidor del Bien",     desc: "Foto haciendo una obra de caridad o ayudando a alguien" },
-  { id: 7,  emoji: "🏠",  nombre: "Familia Sagrada",       desc: "Una foto bonita con tu familia en casa o en la iglesia" },
-  { id: 8,  emoji: "🎨",  nombre: "Artista de Fe",          desc: "Sube un dibujo, manualidad o trabajo que hayas hecho en catequesis" },
-  { id: 9,  emoji: "🌿",  nombre: "Guardián de la Creación","desc": "Foto cuidando la naturaleza: un árbol, plantas o limpiando" },
-  { id: 10, emoji: "💡",  nombre: "Luz del Mundo",          desc: "Foto tuya con una vela encendida en Navidad, Pascua o en misa" },
-  { id: 11, emoji: "🎉",  nombre: "Misionero Alegre",       desc: "Foto compartiendo la fe: enseñando, cantando o celebrando" },
+  { id: 1,  emoji: "✝️",  nombre: "SAN JUDAS TADEO",      desc: "Sube tu foto del sacramento del Bautismo o tu primera comunión" },
+  { id: 2,  emoji: "🕊️", nombre: "TODOS SANTOS",       desc: "Captura un momento especial de oración o misa contigo" },
+  { id: 3,  emoji: "📖",  nombre: "CRISTO REY", desc: "Tómate una foto sosteniendo tu Biblia o libro de catequesis" },
+  { id: 4,  emoji: "🙏",  nombre: "VIRGEN DE GUADALUPE",        desc: "Foto tuya rezando el Rosario o en adoración" },
+  { id: 5,  emoji: "⭐",  nombre: "ADVIENTO",         desc: "Imagen tuya en un retiro, convivio o evento de fe" },
+  { id: 6,  emoji: "🤝",  nombre: "NAVIDAD",     desc: "Foto haciendo una obra de caridad o ayudando a alguien" },
+  { id: 7,  emoji: "🏠",  nombre: "MIERCOLES DE CENIZA",       desc: "Una foto bonita con tu familia en casa o en la iglesia" },
+  { id: 8,  emoji: "🎨",  nombre: "DOMINGO DE RAMOS",          desc: "Sube un dibujo, manualidad o trabajo que hayas hecho en catequesis" },
+  { id: 9,  emoji: "🌿",  nombre: "TRIDUO PASCUAL","desc": "Foto cuidando la naturaleza: un árbol, plantas o limpiando" },
+  { id: 10, emoji: "💡",  nombre: "EL SEÑOR DE LA MISERICORDIA",          desc: "Foto tuya con una vela encendida en Navidad, Pascua o en misa" },
+  { id: 11, emoji: "🎉",  nombre: "PENTECOSTES",       desc: "Foto compartiendo la fe: enseñando, cantando o celebrando" },
   { id: 12, emoji: "👑",  nombre: "Campeón CateKids",       desc: "¡Completa las 11 insignias anteriores y sube tu foto de graduación!" },
 ];
 
@@ -1758,6 +1775,17 @@ async function iniciarSesion() {
     sesion = data;
     // Inicializar el mapa de fotos CK desde los datos del servidor
     sesion.ckFotos = data.ckFotos || {};
+    // Normalizar URLs de tarjetas para garantizar formato thumbnail
+    if (sesion.tarjetas) {
+      sesion.tarjetas = sesion.tarjetas.map(t => ({
+        ...t, url: t.url ? driveImg(t.url) : null
+      }));
+    }
+    if (sesion.ckFotos) {
+      Object.keys(sesion.ckFotos).forEach(k => {
+        sesion.ckFotos[k] = driveImg(sesion.ckFotos[k]);
+      });
+    }
     tarjetasData = data.tarjetas;
     mostrarLoader(false);
     mostrarAlbum();
@@ -1868,9 +1896,9 @@ function renderGrid(tarjetas) {
 
     if (t.url) {
       el.innerHTML = `
-        <img class="img-t" src="${t.url}" alt="${NOMBRES_TARJETAS[t.numero-1]}"
-             loading="lazy"
-             onerror="this.parentElement.classList.add('sin-img'); this.style.display='none'">
+        <img class="img-t" src="${driveImg(t.url)}" alt="${NOMBRES_TARJETAS[t.numero-1]}"
+             loading="lazy" crossorigin="anonymous"
+             onerror="this.src='https://drive.google.com/thumbnail?id='+encodeURIComponent('${t.url}'.split('id=')[1]||'')+'&sz=w400'; this.onerror=function(){this.parentElement.classList.add('sin-img');this.style.display='none'}">
         <div class="overlay-t">
           <div class="num-t">#${t.numero}</div>
           <div class="nombre-t">${NOMBRES_TARJETAS[t.numero-1]}</div>
@@ -1916,7 +1944,8 @@ function abrirModal(tarjeta) {
   document.getElementById('btn-subir-tarjeta').disabled = false;
 
   if (tarjeta.url) {
-    imgEl.src = tarjeta.url;
+    imgEl.src = driveImg(tarjeta.url);
+    imgEl.crossOrigin = 'anonymous';
     imgEl.style.display = 'block';
     emojiEl.style.display = 'none';
     document.getElementById('modal-badge2').textContent = '✅ ¡La tienes!';
@@ -2038,7 +2067,7 @@ function resetBtnSubir() {
 function abrirLightbox() {
   if (!tarjetaModalActual || !tarjetaModalActual.url) return;
   const nombre = NOMBRES_TARJETAS[tarjetaModalActual.numero - 1];
-  document.getElementById('lightbox-img').src   = tarjetaModalActual.url;
+  document.getElementById('lightbox-img').src   = driveImg(tarjetaModalActual.url);
   document.getElementById('lightbox-titulo').textContent = '✝️ ' + nombre + ' — Tarjeta #' + tarjetaModalActual.numero;
   document.getElementById('lightbox').classList.add('visible');
 }
@@ -2337,7 +2366,7 @@ function renderCKInsignias() {
     card.innerHTML = `
       <div class="ck-card-foto-wrap">
         ${foto
-          ? `<img class="ck-card-foto" src="${foto}" alt="${ins.nombre}" loading="lazy">`
+          ? `<img class="ck-card-foto" src="${driveImg(foto)}" alt="${ins.nombre}" loading="lazy" crossorigin="anonymous">`
           : `<div class="ck-card-emoji-placeholder">${ins.emoji}</div>`
         }
         <div class="ck-card-check">✓</div>
@@ -2374,7 +2403,7 @@ function abrirModalCK(ins) {
   const subirTxt   = document.getElementById('ck-btn-subir-txt');
 
   if (foto) {
-    imgEl.src              = foto;
+    imgEl.src              = driveImg(foto);
     imgEl.style.display    = 'block';
     emojiEl.style.display  = 'none';
     lockedEl.style.display = 'none';
@@ -2598,7 +2627,7 @@ function abrirLightboxCK() {
   const fotos = ckGetFotos();
   const foto  = fotos[ckInsigniaActual.id];
   if (!foto) return;
-  document.getElementById('lightbox-ck-img').src    = foto;
+  document.getElementById('lightbox-ck-img').src    = driveImg(foto);
   document.getElementById('lightbox-ck-titulo').textContent = ckInsigniaActual.emoji + ' ' + ckInsigniaActual.nombre;
   document.getElementById('lightbox-ck').classList.add('visible');
 }

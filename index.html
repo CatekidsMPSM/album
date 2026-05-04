@@ -1293,6 +1293,81 @@ body {
 }
 .ck-btn-borrar:hover { background: rgba(255,107,53,.2); }
 
+.ck-camara-wrap {
+  padding: 10px 12px 0;
+}
+.ck-camara-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-family: 'Fredoka One', cursive;
+  font-size: .98rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(124,92,191,.4);
+}
+.ck-camara-btn:active { transform: scale(.97); }
+.ck-forms-divider {
+  text-align: center;
+  padding: 10px 0 4px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--texto2);
+  letter-spacing: .04em;
+}
+
+/* Google Forms en insignias CK */
+.ck-forms-wrap {
+  margin-bottom: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  background: var(--fondo3);
+}
+.ck-forms-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(124,92,191,.3), rgba(78,205,196,.15));
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.ck-forms-icon  { font-size: 1.1rem; }
+.ck-forms-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: .95rem;
+  color: var(--texto);
+}
+.ck-forms-frame-wrap {
+  position: relative;
+  width: 100%;
+  height: 460px;
+  overflow: hidden;
+}
+.ck-forms-frame-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: white;
+  border-radius: 0 0 4px 4px;
+}
+.ck-forms-hint {
+  font-size: .72rem;
+  color: var(--texto2);
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+
 /* Burbuja de comentario IA */
 .ck-ai-burbuja {
   display: none;
@@ -1486,28 +1561,42 @@ body {
     <div class="modal-titulo" id="ck-modal-titulo">Insignia</div>
     <div class="modal-sub"    id="ck-modal-desc">Descripción</div>
 
-    <div class="modal-badge" style="margin-bottom:4px">
+    <div class="modal-badge" style="margin-bottom:12px">
       <span class="badge" id="ck-modal-num">#1</span>
       <span class="badge" id="ck-modal-estado">🎯 Pendiente</span>
     </div>
 
-    <!-- Subir foto -->
-    <div class="ck-upload-area" id="ck-upload-area">
-      <input type="file" id="ck-file-input" accept="image/*" capture="environment" style="display:none" onchange="onCKFileSelected(event)">
-      <button class="ck-btn-subir" onclick="document.getElementById('ck-file-input').click()">
-        <span id="ck-btn-subir-icon">📸</span>
-        <span id="ck-btn-subir-txt">Tomar / subir foto</span>
-      </button>
+    <!-- Google Forms embebido -->
+    <div class="ck-forms-wrap" id="ck-forms-wrap">
+      <div class="ck-forms-header">
+        <span class="ck-forms-icon">📋</span>
+        <span class="ck-forms-label">Sube tu foto aquí</span>
+      </div>
+      <!-- Botón cámara directa -->
+      <div class="ck-camara-wrap">
+        <input type="file" id="ck-camara-input" accept="image/*" capture="environment"
+               style="display:none" onchange="onCKCamaraSelected(event)">
+        <button class="ck-camara-btn" onclick="document.getElementById('ck-camara-input').click()">
+          📷 Tomar foto con la cámara
+        </button>
+      </div>
+      <div class="ck-forms-divider"><span>— o completa el formulario —</span></div>
+      <div class="ck-forms-frame-wrap">
+        <iframe id="ck-forms-iframe"
+          src=""
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          allow="camera; microphone">
+          Cargando formulario…
+        </iframe>
+      </div>
+      <p class="ck-forms-hint">✅ Después de enviar, pide a tu catequista que valide tu insignia</p>
     </div>
 
-    <!-- Ver imagen grande -->
+    <!-- Ver imagen grande (cuando ya tiene foto) -->
     <button class="btn-ver-imagen" id="ck-btn-ver" onclick="abrirLightboxCK()" style="display:none">
       🖼️ Ver foto en grande
-    </button>
-
-    <!-- Borrar foto -->
-    <button class="ck-btn-borrar" id="ck-btn-borrar" onclick="borrarFotoCK()" style="display:none">
-      🗑️ Borrar foto
     </button>
 
     <button class="btn-cerrar-modal" onclick="cerrarModalCK()">Cerrar</button>
@@ -1583,7 +1672,7 @@ body {
 
       <!-- Subir foto (sin imagen) -->
       <div class="modal-upload-section" id="modal-upload-section" style="display:none">
-        <input type="file" id="tarjeta-file-input" accept="image/*" capture="environment"
+        <input type="file" id="tarjeta-file-input" accept="image/*"
                style="display:none" onchange="onTarjetaFileSelected(event)">
         <button class="modal-forms-toggle" id="btn-subir-tarjeta"
                 onclick="document.getElementById('tarjeta-file-input').click()">
@@ -1598,7 +1687,7 @@ body {
 
       <!-- Cambiar foto (con imagen) -->
       <div class="modal-img-actions" id="modal-img-actions" style="display:none">
-        <input type="file" id="tarjeta-cambiar-input" accept="image/*" capture="environment"
+        <input type="file" id="tarjeta-cambiar-input" accept="image/*"
                style="display:none" onchange="onTarjetaFileSelected(event)">
         <button class="btn-cambiar-foto" onclick="document.getElementById('tarjeta-cambiar-input').click()">
           🔄 Cambiar foto
@@ -1833,8 +1922,17 @@ body {
 // ══════════════════════════════════════════════════
 const TOTAL = 365;
 
-// 🔧 REEMPLAZA con la URL de tu Web App de Google Apps Script
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz5tV8r8vPVk138kZa7_nVZpioLdlxMNNWz4x8nOLzQDQVMJ4Y-_wnQoIrsDGT15fI/exec";
+// 🔧 REEMPLAZA con la URL de tu Google Form para insignias CateKids
+// Formato: https://docs.google.com/forms/d/e/TU_FORM_ID/viewform?embedded=true
+// Si tu form tiene un campo "Insignia" puedes pre-llenarlo con:
+// &entry.XXXXXXXXXX=1  (donde XXXXXXXXXX es el ID del campo en tu form)
+// Déjalo vacío ("") para que el formulario abra sin pre-llenar
+const CK_FORM_BASE_URL = "";
+
+// ID del campo de tu Google Form que corresponde al número de insignia
+// Encuéntralo inspeccionando el form: busca name="entry.XXXXXXXXXX"
+// Déjalo vacío si no quieres pre-llenar el número
+const CK_FORM_ENTRY_INSIGNIA = "";
 
 // 🔧 (Opcional) API key de Anthropic para comentarios IA en insignias
 // Déjalo vacío ("") para desactivar esta función
@@ -2681,14 +2779,13 @@ function abrirModalCK(ins) {
   document.getElementById('ck-modal-desc').textContent   = ins.desc;
   document.getElementById('ck-modal-num').textContent    = '🎖️ #' + ins.id;
 
-  const imgEl      = document.getElementById('ck-modal-img');
-  const emojiEl    = document.getElementById('ck-modal-emoji-big');
-  const lockedEl   = document.getElementById('ck-modal-locked');
-  const verBtn     = document.getElementById('ck-btn-ver');
-  const borrarBtn  = document.getElementById('ck-btn-borrar');
-  const estadoEl   = document.getElementById('ck-modal-estado');
-  const subirIcon  = document.getElementById('ck-btn-subir-icon');
-  const subirTxt   = document.getElementById('ck-btn-subir-txt');
+  const imgEl    = document.getElementById('ck-modal-img');
+  const emojiEl  = document.getElementById('ck-modal-emoji-big');
+  const lockedEl = document.getElementById('ck-modal-locked');
+  const verBtn   = document.getElementById('ck-btn-ver');
+  const estadoEl = document.getElementById('ck-modal-estado');
+  const iframe   = document.getElementById('ck-forms-iframe');
+  const formsWrap= document.getElementById('ck-forms-wrap');
 
   if (foto) {
     imgEl.src              = driveImg(foto);
@@ -2696,26 +2793,52 @@ function abrirModalCK(ins) {
     emojiEl.style.display  = 'none';
     lockedEl.style.display = 'none';
     verBtn.style.display   = 'flex';
-    borrarBtn.style.display= 'block';
     estadoEl.textContent   = '✅ ¡Completada!';
     estadoEl.style.background = 'linear-gradient(135deg,#2e7d32,#4caf50)';
-    subirIcon.textContent  = '🔄';
-    subirTxt.textContent   = 'Cambiar foto';
+    // Mostrar forms igual aunque tenga foto (por si quiere actualizar)
+    formsWrap.style.display = 'block';
   } else {
     imgEl.style.display    = 'none';
     emojiEl.style.display  = 'block';
     emojiEl.textContent    = ins.emoji;
     lockedEl.style.display = 'flex';
     verBtn.style.display   = 'none';
-    borrarBtn.style.display= 'none';
     estadoEl.textContent   = '🎯 Pendiente';
     estadoEl.style.background = 'linear-gradient(135deg,var(--fondo3),var(--carta2))';
-    subirIcon.textContent  = '📸';
-    subirTxt.textContent   = 'Tomar / subir foto';
+    formsWrap.style.display = 'block';
   }
 
-  // Limpiar input de archivo
-  document.getElementById('ck-file-input').value = '';
+  // Construir URL del Google Form pre-llenando el número de insignia
+  if (CK_FORM_BASE_URL) {
+    let formUrl = CK_FORM_BASE_URL;
+    // Pre-llenar número de insignia si se configuró el entry ID
+    if (CK_FORM_ENTRY_INSIGNIA) {
+      const sep = formUrl.includes('?') ? '&' : '?';
+      formUrl += sep + CK_FORM_ENTRY_INSIGNIA + '=' + encodeURIComponent(ins.id + ' - ' + ins.nombre);
+    }
+    // Pre-llenar código del niño si hay sesión activa
+    if (sesion && sesion.codigo) {
+      formUrl += '&entry_codigo=' + encodeURIComponent(sesion.codigo);
+    }
+    // Solo recargar si cambia la insignia
+    if (iframe.dataset.insId !== String(ins.id)) {
+      iframe.src = formUrl;
+      iframe.dataset.insId = String(ins.id);
+    }
+  } else {
+    // Sin URL configurada: mostrar mensaje de ayuda
+    formsWrap.innerHTML = `
+      <div class="ck-forms-header">
+        <span class="ck-forms-icon">⚙️</span>
+        <span class="ck-forms-label">Configura tu Google Form</span>
+      </div>
+      <div style="padding:20px;text-align:center;color:var(--texto2);font-size:.82rem;font-weight:700;line-height:1.7">
+        Edita el archivo <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">index.html</code><br>
+        y reemplaza <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">CK_FORM_BASE_URL</code><br>
+        con la URL de tu Google Form 📋
+      </div>
+    `;
+  }
 
   document.getElementById('modal-ck').classList.add('visible');
 }
@@ -2729,40 +2852,34 @@ function cerrarModalCK(event) {
 }
 
 // ══════════════════════════════════════════════════
-// SUBIR FOTO CK → GOOGLE DRIVE + COMENTARIO IA
+// CÁMARA DIRECTA EN INSIGNIAS CK → GOOGLE DRIVE
 // ══════════════════════════════════════════════════
-function onCKFileSelected(event) {
+async function onCKCamaraSelected(event) {
   const file = event.target.files[0];
   if (!file || !ckInsigniaActual || !sesion) return;
 
-  const ins = ckInsigniaActual;
+  const ins      = ckInsigniaActual;
+  const camaraBtn = document.querySelector('.ck-camara-btn');
 
-  // Mostrar estado de carga en el modal
-  const subirBtn  = document.querySelector('#ck-upload-area .ck-btn-subir');
-  const subirIcon = document.getElementById('ck-btn-subir-icon');
-  const subirTxt  = document.getElementById('ck-btn-subir-txt');
-  subirBtn.disabled       = true;
-  subirIcon.textContent   = '⏳';
-  subirTxt.textContent    = 'Guardando en Drive…';
+  // Feedback visual
+  camaraBtn.disabled     = true;
+  camaraBtn.textContent  = '⏳ Guardando en Drive…';
 
-  // Limpiar comentario anterior
   ocultarComentarioIA();
 
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
-      // Comprimir
       const dataUrl = await new Promise(res => comprimirImagen(e.target.result, 600, 0.78, res));
 
-      // Subir a Drive via Apps Script
       const payload = {
-        action:    'subirInsignia',
-        codigo:    sesion.codigo,
-        nombre:    sesion.nombre,
-        insigniaId: ins.id,
+        action:         'subirInsignia',
+        codigo:         sesion.codigo,
+        nombre:         sesion.nombre,
+        insigniaId:     ins.id,
         insigniaNombre: ins.nombre,
-        imagen:    dataUrl,
-        mimeType:  file.type || 'image/jpeg',
+        imagen:         dataUrl,
+        mimeType:       file.type || 'image/jpeg',
       };
 
       const res  = await fetch(WEBAPP_URL, {
@@ -2774,27 +2891,29 @@ function onCKFileSelected(event) {
 
       if (!data.ok) throw new Error(data.mensaje || 'Error al subir');
 
-      // Actualizar estado local
       ckSetFoto(ins.id, data.url);
-
-      mostrarToast('🎖️ ¡Insignia "' + ins.nombre + '" guardada en Drive! ⭐');
+      mostrarToast('🎖️ ¡Insignia "' + ins.nombre + '" guardada! ⭐');
       lanzarConfeti();
 
-      // Reabrir modal con foto nueva
+      // Reabrir modal con la nueva foto
       abrirModalCK(ins);
       renderCKInsignias();
 
-      // Pedir comentario IA con la imagen
+      // Comentario IA
       pedirComentarioIA(dataUrl, ins);
 
     } catch (err) {
-      mostrarToast('❌ Error al guardar: ' + err.message);
-      subirBtn.disabled     = false;
-      subirIcon.textContent = '📸';
-      subirTxt.textContent  = 'Tomar / subir foto';
+      mostrarToast('❌ Error: ' + err.message);
+      camaraBtn.disabled    = false;
+      camaraBtn.textContent = '📷 Tomar foto con la cámara';
     }
   };
   reader.readAsDataURL(file);
+}
+
+// Función legacy — ya no se usa pero se mantiene por compatibilidad
+function onCKFileSelected(event) {
+  onCKCamaraSelected(event);
 }
 
 // ── COMENTARIO IA PARA NIÑOS ─────────────────────

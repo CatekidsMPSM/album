@@ -2286,26 +2286,34 @@ body {
 
 <script>
 // ══════════════════════════════════════════════════
-// CONFIGURACIÓN
+// CONFIGURACIÓN — EDITA ESTOS VALORES
 // ══════════════════════════════════════════════════
 const TOTAL = 365;
 
-// 🔧 REEMPLAZA con la URL de tu Google Form para insignias CateKids
-// Formato: https://docs.google.com/forms/d/e/TU_FORM_ID/viewform?embedded=true
-// Si tu form tiene un campo "Insignia" puedes pre-llenarlo con:
-// &entry.XXXXXXXXXX=1  (donde XXXXXXXXXX es el ID del campo en tu form)
-// Déjalo vacío ("") para que el formulario abra sin pre-llenar
-// URL del Google Form de INSIGNIAS (ve al form → ⋮ → Obtener enlace previo → copiar URL larga)
-const CK_FORM_BASE_URL = "https://forms.gle/VSVWKiCyyvAfZ8SRA";
+// 🔧 PASO 1: Pega aquí la URL de tu Google Apps Script Web App
+// (Apps Script → Implementar → Gestionar implementaciones → copiar URL)
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxu1rfvBzCPUedISTHxZdC-T_QE95LPpwsLd45YN272xf0PA7uTVuksIPFyaLUjFoo/exec";
 
-// ID del campo de tu Google Form que corresponde al número de insignia
-// Encuéntralo inspeccionando el form: busca name="entry.XXXXXXXXXX"
-// Déjalo vacío si no quieres pre-llenar el número
-const CK_FORM_ENTRY_INSIGNIA = ""; // ID del campo código en tu form (entry.XXXXXXXXX)
-
-// 🔧 (Opcional) API key de Anthropic para comentarios IA en insignias
-// Déjalo vacío ("") para desactivar esta función
+// 🔧 PASO 2 (Opcional): API key de Anthropic para info de santos e IA
 const ANTHROPIC_API_KEY = "";
+
+// Google Forms
+const CK_FORM_BASE_URL     = "https://forms.gle/VSVWKiCyyvAfZ8SRA";
+const CK_FORM_ENTRY_INSIGNIA = "";
+const FORM_TARJETAS_URL    = "https://forms.gle/VcaFGJ5gAzohAxxQ9";
+
+// ── Helper: fetch POST compatible con CORS de Apps Script ──
+// Apps Script solo acepta POST sin preflight cuando Content-Type es text/plain
+async function gasPost(payload) {
+  const res = await fetch(WEBAPP_URL, {
+    method:  'POST',
+    headers: { 'Content-Type': 'text/plain' }, // evita preflight CORS
+    body:    JSON.stringify(payload),
+  });
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch(e) { throw new Error('Respuesta inválida del servidor: ' + text.slice(0, 80)); }
+}
 
 // Convierte cualquier URL de Drive al formato thumbnail (funciona cross-origin)
 function driveImg(url) {
@@ -2772,12 +2780,7 @@ async function onTarjetaFileSelected(event) {
       mimeType:     file.type || 'image/jpeg',
     };
 
-    const res  = await fetch(WEBAPP_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
-    });
-    const data = await res.json();
+    const data = await gasPost(payload);
     bar.style.width = '100%';
 
     if (data.ok) {
@@ -3436,12 +3439,7 @@ async function onCKCamaraSelected(event) {
         mimeType:       file.type || 'image/jpeg',
       };
 
-      const res  = await fetch(WEBAPP_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-      });
-      const data = await res.json();
+      const data = await gasPost(payload);
 
       if (!data.ok) throw new Error(data.mensaje || 'Error al subir');
 
@@ -3562,15 +3560,7 @@ async function borrarFotoCK() {
 
   try {
     // Notificar al servidor para borrar el archivo de Drive (opcional, recomendado)
-    await fetch(WEBAPP_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        action:     'borrarInsignia',
-        codigo:     sesion.codigo,
-        insigniaId: ckInsigniaActual.id,
-      }),
-    }).catch(() => {}); // Si falla la petición, igual borramos localmente
+    gasPost({ action: 'borrarInsignia', codigo: sesion.codigo, insigniaId: ckInsigniaActual.id }).catch(() => {}); // Si falla la petición, igual borramos localmente
   } catch (e) {}
 
   ckDeleteFoto(ckInsigniaActual.id);
@@ -3595,7 +3585,6 @@ function abrirLightboxCK() {
 
 
 // URL del forms de tarjetas
-const FORM_TARJETAS_URL = "https://forms.gle/VcaFGJ5gAzohAxxQ9";
 
 // Abrir Google Form de insignia en nueva pestaña
 function abrirFormInsignia(insId, insNombre) {

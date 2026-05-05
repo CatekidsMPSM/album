@@ -2292,7 +2292,7 @@ const TOTAL = 365;
 
 // 🔧 PASO 1: Pega aquí la URL de tu Google Apps Script Web App
 // (Apps Script → Implementar → Gestionar implementaciones → copiar URL)
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxu1rfvBzCPUedISTHxZdC-T_QE95LPpwsLd45YN272xf0PA7uTVuksIPFyaLUjFoo/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyw3y8BEosBIl6f8cPXl9eETh-pIwEU9fhJiTyKSsVpcqeFWUSC4c3CzOgEqwPYPCE/exec";
 
 // 🔧 PASO 2 (Opcional): API key de Anthropic para info de santos e IA
 const ANTHROPIC_API_KEY = "";
@@ -2762,7 +2762,8 @@ async function onTarjetaFileSelected(event) {
   try {
     const dataUrl = await new Promise((res, rej) => {
       const reader = new FileReader();
-      reader.onload = e => comprimirImagen(e.target.result, 800, 0.8, res);
+      // Comprimir a 500px, calidad 0.65 para que quepa bien en Apps Script
+      reader.onload = e => comprimirImagen(e.target.result, 500, 0.65, res);
       reader.onerror = rej;
       reader.readAsDataURL(file);
     });
@@ -2777,10 +2778,23 @@ async function onTarjetaFileSelected(event) {
       tarjeta:      tarjetaModalActual.numero,
       nombreSanto:  nombreSanto.trim() || ('Tarjeta ' + numStr),
       imagen:       dataUrl,
-      mimeType:     file.type || 'image/jpeg',
+      mimeType:     'image/jpeg',
     };
 
-    const data = await gasPost(payload);
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 30000);
+    const res = await fetch(WEBAPP_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify(payload),
+      signal:  controller.signal,
+    });
+    clearTimeout(tid);
+
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) { throw new Error('Respuesta inválida'); }
+
     bar.style.width = '100%';
 
     if (data.ok) {
@@ -2815,7 +2829,9 @@ async function onTarjetaFileSelected(event) {
 
   } catch (err) {
     bar.style.background = 'var(--naranja)';
-    txt.textContent = '❌ Error de conexión';
+    txt.textContent = err.name === 'AbortError'
+      ? '❌ Tiempo agotado — intenta de nuevo'
+      : '❌ Error de conexión';
     resetBtnSubir();
   }
 }
@@ -3415,58 +3431,76 @@ async function onCKCamaraSelected(event) {
   const file = event.target.files[0];
   if (!file || !ckInsigniaActual || !sesion) return;
 
-  const ins      = ckInsigniaActual;
+  const ins       = ckInsigniaActual;
   const camaraBtn = document.querySelector('.ck-camara-btn');
 
-  // Feedback visual
-  camaraBtn.disabled     = true;
-  camaraBtn.textContent  = '⏳ Guardando en Drive…';
-
+  camaraBtn.disabled    = true;
+  camaraBtn.textContent = '⏳ Comprimiendo imagen…';
   ocultarComentarioIA();
 
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    try {
-      const dataUrl = await new Promise(res => comprimirImagen(e.target.result, 600, 0.78, res));
-
-      const payload = {
-        action:         'subirInsignia',
-        codigo:         sesion.codigo,
-        nombre:         sesion.nombre,
-        insigniaId:     ins.id,
-        insigniaNombre: ins.nombre,
-        imagen:         dataUrl,
-        mimeType:       file.type || 'image/jpeg',
+  try {
+    const reader = new FileReader();
+    const dataUrl = await new Promise((res, rej) => {
+      reader.onload  = async e => {
+        // Comprimir mucho — máx 400px, calidad 0.6 para que quepa en el POST
+        comprimirImagen(e.target.result, 400, 0.6, res);
       };
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
 
-      const data = await gasPost(payload);
+    camaraBtn.textContent = '⏳ Guardando en Drive…';
 
-      if (!data.ok) throw new Error(data.mensaje || 'Error al subir');
+    const payload = {
+      action:         'subirInsignia',
+      codigo:         sesion.codigo,
+      nombre:         sesion.nombre,
+      insigniaId:     ins.id,
+      insigniaNombre: ins.nombre,
+      imagen:         dataUrl,
+      mimeType:       'image/jpeg',
+    };
 
-      ckSetFoto(ins.id, data.url);
-      mostrarToast('🎖️ ¡Insignia "' + ins.nombre + '" guardada! ⭐');
-      lanzarConfeti();
+    // Timeout de 30s para Apps Script
+    const controller = new AbortController();
+    const timeoutId  = setTimeout(() => controller.abort(), 30000);
 
-      // Reabrir modal con la nueva foto
-      abrirModalCK(ins);
-      renderCKInsignias();
+    const res = await fetch(WEBAPP_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify(payload),
+      signal:  controller.signal,
+    });
+    clearTimeout(timeoutId);
 
-      // Comentario IA
-      pedirComentarioIA(dataUrl, ins);
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch(e) { throw new Error('Respuesta inesperada del servidor'); }
 
-    } catch (err) {
-      mostrarToast('❌ Error: ' + err.message);
-      camaraBtn.disabled    = false;
-      camaraBtn.textContent = '📷 Tomar foto con la cámara';
-    }
-  };
-  reader.readAsDataURL(file);
+    if (!data.ok) throw new Error(data.mensaje || 'Error al subir');
+
+    // Guardar localmente
+    ckSetFoto(ins.id, data.url);
+
+    mostrarToast('🎖️ ¡Insignia "' + ins.nombre + '" guardada! ⭐');
+    lanzarConfeti();
+    abrirModalCK(ins);
+    renderCKInsignias();
+    pedirComentarioIA(dataUrl, ins);
+
+  } catch (err) {
+    const msg = err.name === 'AbortError'
+      ? '❌ Tiempo de espera agotado — intenta de nuevo'
+      : '❌ ' + err.message;
+    mostrarToast(msg);
+    camaraBtn.disabled    = false;
+    camaraBtn.textContent = '📷 Tomar foto con la cámara';
+  }
 }
 
-// Función legacy — ya no se usa pero se mantiene por compatibilidad
-function onCKFileSelected(event) {
-  onCKCamaraSelected(event);
-}
+// Función legacy
+function onCKFileSelected(event) { onCKCamaraSelected(event); }
 
 // ── COMENTARIO IA PARA NIÑOS ─────────────────────
 async function pedirComentarioIA(dataUrl, ins) {
